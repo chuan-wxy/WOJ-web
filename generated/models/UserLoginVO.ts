@@ -3,6 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type UserLoginVO = {
+    jwt?: string;
     userAccount?: string;
     userName?: string;
     userProfile?: string;
@@ -17,6 +18,5 @@ export type UserLoginVO = {
     titleName?: string;
     titleColor?: string;
     createTime?: string;
-    jwt?: string;
 };
 
