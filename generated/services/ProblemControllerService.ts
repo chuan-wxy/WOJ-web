@@ -1,3 +1,5 @@
+import type { BaseResponseIPageProblemTitleVO } from "../models/BaseResponseIPageProblemTitleVO";
+import type { BaseResponseListTagVO } from "../models/BaseResponseListTagVO";
 import type { BaseResponsePageProblemTitleVO } from "../models/BaseResponsePageProblemTitleVO";
 import type { BaseResponseString } from "../models/BaseResponseString";
 import type { ProblemAddDTO } from "../models/ProblemAddDTO";
@@ -46,17 +48,17 @@ export class ProblemControllerService {
    * @param tags
    * @param difficulty
    * @param title
-   * @returns BaseResponsePageProblemTitleVO OK
+   * @returns BaseResponseIPageProblemTitleVO OK
    * @throws ApiError
    */
   public static searchProblemTitleTwo(
     current: number,
     size: number,
-    id: number,
-    tags: string,
-    difficulty: string,
-    title: string
-  ): CancelablePromise<BaseResponsePageProblemTitleVO> {
+    id?: number,
+    tags?: string,
+    difficulty?: string,
+    title?: string
+  ): CancelablePromise<BaseResponseIPageProblemTitleVO> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/problem/search-problemtitlelist",
@@ -111,6 +113,17 @@ export class ProblemControllerService {
         size: size,
         current: current,
       },
+    });
+  }
+
+  /**
+   * @returns BaseResponseListTagVO OK
+   * @throws ApiError
+   */
+  public static getProblemTagList(): CancelablePromise<BaseResponseListTagVO> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/problem/get-problemtaglist",
     });
   }
 }
