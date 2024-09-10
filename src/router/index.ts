@@ -10,6 +10,8 @@ import BasicLayout from "@/layout/BasicLayout.vue";
 import TestView from "@/views/admin/TestView.vue";
 import UserProfileView from "@/views/user/UserProfileView.vue";
 import ProblemContentView from "@/views/question/ProblemContentView.vue";
+import AddQuesitonView from "@/views/admin/AddProblemView.vue";
+import AddProblemView from "@/views/admin/AddProblemView.vue";
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -39,6 +41,11 @@ const router = createRouter({
               path: "/admin/test",
               name: "测试",
               component: TestView,
+            },
+            {
+              path: "/admin/addproblem",
+              name: "新增题目",
+              component: AddProblemView,
             },
           ],
         },
@@ -94,13 +101,6 @@ const router = createRouter({
     //   component: TeacherView,
     // },
     // },
-    // {
-    //   path: "/addquestion",
-    //   name: "新增题目",
-    //   component: AddQuesitonView,
-    //   meta: {
-    //     access: ACCESS_ENUM.ADMIN,
-    //   },
     // },
     // {
     //   path: "/admin/addteacherquestion",
