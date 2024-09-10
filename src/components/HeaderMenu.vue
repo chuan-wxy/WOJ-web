@@ -155,7 +155,7 @@
               <el-dropdown-item command="/user/profile"
                 >个人信息
               </el-dropdown-item>
-              <el-dropdown-item>退出登录</el-dropdown-item>
+              <el-dropdown-item @click="logout()">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -168,21 +168,6 @@
           >登录
         </router-link>
       </div>
-      <!--      <div class="avatar-bar" v-if="userStore.userInfo.userAccount !== null">-->
-      <!--        <el-avatar-->
-      <!--          shape="square"-->
-      <!--          :size="size"-->
-      <!--          :src="userStore.userInfo.avatar"-->
-      <!--        />-->
-      <!--      </div>-->
-      <!--      <div class="header-menu" v-else>-->
-      <!--        <router-link-->
-      <!--          to="/login"-->
-      <!--          :class="{ 'is-active': 10 === commonStore.isActiveIndexOfBar }"-->
-      <!--          @click="commonStore.setActiveIndex(10)"-->
-      <!--          >登录-->
-      <!--        </router-link>-->
-      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -230,6 +215,10 @@ const adminBar = ref([
 
 const changeTheme = () => {
   document.body.classList.toggle("light-mode");
+};
+
+const logout = () => {
+  userStore.clearUserInfo();
 };
 
 onBeforeMount(() => {
