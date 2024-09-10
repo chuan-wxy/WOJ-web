@@ -5,8 +5,11 @@
         <a-form-item field="title" label="题目">
           <a-input v-model="form.title" placeholder="请输入题目标题" />
         </a-form-item>
+        <a-form-item field="problemId" label="自定义ID">
+          <a-input v-model="form.problemId" placeholder="请输入自定义id" />
+        </a-form-item>
         <a-form-item field="tags" label="标签">
-          <a-input-tag v-model="form.tags" placeholder="请输入题目标签" />
+          <a-input-tag v-model="form.tagList" placeholder="请输入题目标签" />
         </a-form-item>
         <a-form-item field="difficulty" label="难度">
           <a-select
@@ -14,162 +17,130 @@
             placeholder="请选择"
             v-model="form.difficulty"
           >
-            <a-option>简单</a-option>
-            <a-option>中等</a-option>
-            <a-option>困难</a-option>
+            <a-option value="0">简单</a-option>
+            <a-option value="1">中等</a-option>
+            <a-option value="2">困难</a-option>
           </a-select>
         </a-form-item>
       </a-space>
       <a-form-item field="content" label="内容">
-        <MdEditor :value="form.content" :handle-change="onContentMdchange" />
-      </a-form-item>
-      <a-form-item field="answer" label="答案">
-        <MdEditor :value="form.answer" :handle-change="onAnswerMdchange" />
+        <MdEditor
+          :value="form.description"
+          :handle-change="onContentMdchange"
+        />
       </a-form-item>
       <a-form-item label="配置" :content-flex="false" :merge-props="false">
         <a-space direction="vertical" fill>
           <a-form-item field="judgeConfig.timeLimit1" label="时间限制">
-            <a-input
-              v-model="form.judgeConfig.timeLimit"
-              placeholder="时间限制"
-            />
+            <a-input v-model="form.timeLimit" placeholder="时间限制" />
           </a-form-item>
           <a-form-item field="judgeConfig.memoryLimit" label="内存限制">
-            <a-input
-              v-model="form.judgeConfig.memoryLimit"
-              placeholder="内存限制"
-            />
+            <a-input v-model="form.memoryLimit" placeholder="内存限制" />
           </a-form-item>
           <a-form-item field="judgeConfig.stackLimit" label="堆栈限制">
-            <a-input
-              v-model="form.judgeConfig.stackLimit"
-              placeholder="堆栈限制"
-            />
+            <a-input v-model="form.stackLimit" placeholder="堆栈限制" />
           </a-form-item>
         </a-space>
       </a-form-item>
-      <div>测试用例</div>
-      <a-form-item
-        v-for="(judgeCaseItem, index) of form.judgeCase"
-        :label="`测试用例${index}`"
-        :key="index"
-      >
-        <a-space align="center">
-          <a-form-item
-            :field="`form.judgeCase[${index}].input`"
-            :label="`输入`"
-            :key="index"
-          >
-            <a-input
-              v-model="judgeCaseItem.input"
-              placeholder="请输入测试输入用例"
-            />
-          </a-form-item>
-          <a-form-item
-            :field="`form.judgeCase[${index}].output`"
-            :label="`输出`"
-            :key="index"
-          >
-            <a-input
-              v-model="judgeCaseItem.output"
-              placeholder="请输入测试输出用例"
-            />
-          </a-form-item>
-          <a-button @click="handleDelete(index)" :style="{ marginLeft: '10px' }"
-            >删除
-          </a-button>
-        </a-space>
-      </a-form-item>
-      <div>
-        <a-button @click="handleAdd">新增测试用例</a-button>
-      </div>
+      <!--      <div>测试用例</div>-->
+      <!--      <a-form-item-->
+      <!--        v-for="(judgeCaseItem, index) of form.judgeCase"-->
+      <!--        :label="`测试用例${index}`"-->
+      <!--        :key="index"-->
+      <!--      >-->
+      <!--        <a-space align="center">-->
+      <!--          <a-form-item-->
+      <!--            :field="`form.judgeCase[${index}].input`"-->
+      <!--            :label="`输入`"-->
+      <!--            :key="index"-->
+      <!--          >-->
+      <!--            <a-input-->
+      <!--              v-model="judgeCaseItem.input"-->
+      <!--              placeholder="请输入测试输入用例"-->
+      <!--            />-->
+      <!--          </a-form-item>-->
+      <!--          <a-form-item-->
+      <!--            :field="`form.judgeCase[${index}].output`"-->
+      <!--            :label="`输出`"-->
+      <!--            :key="index"-->
+      <!--          >-->
+      <!--            <a-input-->
+      <!--              v-model="judgeCaseItem.output"-->
+      <!--              placeholder="请输入测试输出用例"-->
+      <!--            />-->
+      <!--          </a-form-item>-->
+      <!--          <a-button @click="handleDelete(index)" :style="{ marginLeft: '10px' }"-->
+      <!--            >删除-->
+      <!--          </a-button>-->
+      <!--        </a-space>-->
+      <!--      </a-form-item>-->
+      <!--      <div>-->
+      <!--        <a-button @click="handleAdd">新增测试用例</a-button>-->
+      <!--      </div>-->
       <a-button status="success" @click="addQuestion()">提交</a-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, ref } from "vue";
 import MdEditor from "@/components/MdEditor.vue";
 import { useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
+import { ProblemControllerService } from "../../../generated/services/ProblemControllerService";
+import { useUserStore } from "@/store/UserStore";
+import { ProblemVO } from "../../../generated/models/ProblemVO";
 
 const route = useRoute();
-const updatePage = route.path.includes("id");
-
-let form = ref({
+const userStore = useUserStore();
+const form = ref({
+  problemId: "",
   title: "",
-  content: "",
-  tags: [],
-  difficulty: "",
-  answer: "",
-  judgeConfig: {
-    timeLimit: 0,
-    memoryLimit: 0,
-    stackLimit: 0,
-  },
-  judgeCase: [
-    {
-      input: "",
-      output: "",
-    },
-  ],
-});
+  author: "",
+  description: "",
+  tagList: [],
+  timeLimit: 0,
+  memoryLimit: 0,
+  stackLimit: 0,
+  input: "",
+  output: "",
+  source: "",
+  difficulty: 0,
+  auth: 0,
+  judgeMode: "default",
+  spjCode: "",
+  spjLanguage: "",
+} as ProblemVO);
 
-// const addQuestion = async () => {
-//   const result = await QuestionControllerService.addQuestionUsingPost(
-//     form.value
-//   );
-//   if (result.code === 0) {
-//     ElMessage.success("添加成功");
-//   } else {
-//     ElMessage.error("添加失败：" + result.message);
-//   }
-// };
+const addQuestion = async () => {
+  form.value.author = userStore.userInfo.userName;
+  const result = await ProblemControllerService.addProblem(form.value);
+  if (result.code === 0) {
+    ElMessage.success("添加成功");
+  } else {
+    ElMessage.error("添加失败：" + result.message);
+  }
+};
 
 const onContentMdchange = (v: string) => {
-  form.value.content = v;
-};
-const onAnswerMdchange = (v: string) => {
-  form.value.answer = v;
+  form.value.description = v;
 };
 
-// const loadData = async () => {
-//   const id = route.query.id;
-//   console.log(3);
-//   console.log(id);
-//   if (!id) {
-//     return;
-//   }
-//   const res = await QuestionControllerService.getQuestionVoByIdUsingGet(
-//     id as any
-//   );
-//   if (res.code === 0) {
-//     form = reactive(res.data as any);
-//     console.log(2);
-//     console.log(form);
-//   } else {
-//     ElMessage.error("加载失败：" + res.message);
-//   }
-// };
-
-const handleAdd = () => {
-  form.value.judgeCase.push({
-    input: "",
-    output: "",
-  });
-};
-const handleDelete = (index: number) => {
-  form.value.judgeCase.splice(index, 1);
+const loadData = async () => {
+  const id = route.query.id;
+  if (!id) {
+    return;
+  }
+  const res = await ProblemControllerService.getProblem(Number(id));
+  if (res.code === 0 && res.data !== undefined) {
+    form.value = res.data as ProblemVO;
+  } else {
+    ElMessage.error("加载失败：" + res.message);
+  }
 };
 
-const diff = (index: number) => {
-  form.value.difficulty = String(index);
-};
 onMounted(() => {
-  console.log(4);
-  // loadData();
-  console.log(5);
+  loadData();
 });
 </script>
 
