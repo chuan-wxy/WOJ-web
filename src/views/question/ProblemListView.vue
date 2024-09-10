@@ -5,47 +5,22 @@
       <el-card class="box-card" shadow="hover">
         <template #header>
           <div class="card-header">
-            题目列表
             <el-pagination
               @current-change="handleCurrentChange"
               :current-page="current"
-              :page-size="20"
-              :total="50"
-              layout="prev, pager, next"
+              :page-size="size"
+              :total="total"
+              layout="total, prev, pager, next"
             />
-            <el-button-group>
-              <!--              <el-popconfirm-->
-              <!--                v-if="gid >= 2"-->
-              <!--                confirm-button-text="确认"-->
-              <!--                cancel-button-text="取消"-->
-              <!--                title="确认添加题目?"-->
-              <!--                @confirm="addProblem"-->
-              <!--              >-->
-              <!--                <template #reference>-->
-              <!--                  <el-button type="success">-->
-              <!--                    <el-icon class="el-icon&#45;&#45;left">-->
-              <!--                      <Plus />-->
-              <!--                    </el-icon>-->
-              <!--                  </el-button>-->
-              <!--                </template>-->
-              <!--              </el-popconfirm>-->
-              <el-button type="primary" @click="getQuestion">
-                <el-icon class="el-icon--left">
-                  <Refresh />
-                </el-icon>
-                刷新
-              </el-button>
-            </el-button-group>
           </div>
         </template>
-
         <div style="display: inline-flex">
           <el-form :inline="true" :model="filter">
             <el-form-item>
               <el-input
                 v-model="filter.id"
                 type="text"
-                placeholder="题目id"
+                placeholder="id"
                 style="width: 50px"
               />
             </el-form-item>
@@ -86,11 +61,11 @@
                 <el-option
                   v-for="tag in tagList"
                   :key="tag"
-                  :label="tag"
-                  :value="tag"
+                  :label="tag.name"
+                  :value="tag.name"
                 >
                   <el-tag type="info">
-                    <span class="tag-text">{{ tag }} </span>
+                    <span class="tag-text">{{ tag.name }} </span>
                   </el-tag>
                 </el-option>
               </el-select>
@@ -120,10 +95,10 @@
           </el-table-column>
           <el-table-column prop="difficulty" label="难度" width="100">
             <template #default="scope">
-              <div v-if="scope.row.difficulty === '简单'">
+              <div v-if="scope.row.difficulty === 0">
                 <el-tag type="success">简单</el-tag>
               </div>
-              <div v-else-if="scope.row.difficulty === '适中'">
+              <div v-else-if="scope.row.difficulty === 1">
                 <el-tag type="warning">适中</el-tag>
               </div>
               <div v-else>
@@ -149,9 +124,9 @@ import { useRouter } from "vue-router";
 import { ProblemControllerService } from "../../../generated/services/ProblemControllerService";
 import { ElMessage } from "element-plus";
 
-const searchValue = ref("");
 const current = ref(1);
-
+const size = ref(20);
+const total = ref(0);
 const finished = ref(false);
 
 const problemList = ref();
@@ -188,12 +163,12 @@ const levels = ref([
   },
   {
     index: 1,
-    label: "困难",
+    label: "适中",
     color: "#FE4C61",
   },
   {
     index: 2,
-    label: "进阶",
+    label: "困难",
     color: "#FFC116",
   },
 ]);
@@ -217,9 +192,10 @@ const filter = ref({
 
 const getQuestion = async () => {
   finished.value = false;
+  console.log("get" + current.value);
   const res = await ProblemControllerService.searchProblemTitleTwo(
     current.value,
-    20,
+    size.value,
     filter.value.id as any,
     filter.value.tags as any,
     filter.value.difficulty as any,
@@ -227,11 +203,19 @@ const getQuestion = async () => {
   );
   if (res.code === 0) {
     console.log(res.data);
+    total.value = res.data?.total;
     problemList.value = res.data?.records;
-    console.log(problemList.value);
     finished.value = true;
   } else {
     ElMessage.error("获取题目列表失败" + res.message);
+  }
+};
+const getTagList = async () => {
+  const res = await ProblemControllerService.getProblemTagList();
+  if (res.code !== 0) {
+    ElMessage.error("获取题目标签失败");
+  } else {
+    tagList.value = res.data;
   }
 };
 const handleCurrentChange = (val: number) => {
@@ -248,6 +232,7 @@ const clear = () => {
 
 onMounted(() => {
   getQuestion();
+  getTagList();
 });
 </script>
 <style scoped>

@@ -8,14 +8,9 @@ import { defineProps, onMounted, ref, toRaw, withDefaults } from "vue";
 import { useCommonStore } from "@/store/CommonStore";
 
 const codeEditorRef = ref();
-const codeEditor = ref();
 const commonStore = useCommonStore();
 
 const n = ref(commonStore.webStyle);
-
-// editor.updateOptions({
-//   theme: n.value === 0 ? "vs-dark" : "vs",
-// });
 
 const props = withDefaults(
   defineProps<{

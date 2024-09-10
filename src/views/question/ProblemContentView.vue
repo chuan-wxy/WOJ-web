@@ -4,7 +4,7 @@
       <h2>{{ form.title }}</h2>
       <br />
       <div class="content">
-        <Viewer class="bytemd" :value="form.content" :plugins="plugins" />
+        <div>{{ form.description }}</div>
       </div>
       <br />
       <div>
@@ -13,7 +13,6 @@
           :handle-change="onAnswerMdchange"
         />
       </div>
-
       <div>
         <a-button @click="submit">提交</a-button>
       </div>
@@ -27,47 +26,42 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useRoute } from "vue-router";
-import { ElMessage } from "element-plus";
-import CodeEditor from "@/components/CodeEditor.vue";
 import gfm from "@bytemd/plugin-gfm";
 import highlight from "@bytemd/plugin-highlight";
-import { Viewer } from "@bytemd/vue-next";
+import { ProblemControllerService } from "../../../generated/services/ProblemControllerService";
+import { ElMessage } from "element-plus";
+import CodeEditor from "@/components/CodeEditor.vue";
 
 const route = useRoute();
 const isState = ref(true);
 const isHide = ref(true);
-const onAnswerMdchange = (v: string) => {
-  submitData.value.code = v;
-};
 const message = ref("");
-let form = ref({
-  title: "",
-  content: "",
-  tags: [],
-  difficulty: "",
-  answer: "",
-  isRead: false,
-  judgeConfig: {
-    timeLimit: 0,
-    memoryLimit: 0,
-    stackLimit: 0,
-  },
-  judgeCase: [{ input: "", output: "" }],
+const form = ref({
+  id: 0,
+  problemId: 0,
+  title: 0,
+  author: "",
+  tagList: [],
+  description: "",
+  input: "",
+  output: "",
+  source: "",
+  difficulty: 0,
+  auth: 0,
 });
 
-const plugins = [
-  gfm(),
-  highlight(),
-  // Add more plugins here
-];
+const plugins = [gfm(), highlight()];
 
 const submitData = ref({
   language: "c++",
   code: "",
   questionId: 0,
 });
+const onAnswerMdchange = (v: string) => {
+  submitData.value.code = v;
+};
 // const submit = async () => {
 //   isState.value = false;
 //   isHide.value = false;
@@ -85,29 +79,24 @@ const submitData = ref({
 //     ElMessage.error("添加失败：" + result.message);
 //   }
 // };
-//
-// const loadData = async () => {
-//   const id = route.query.id;
-//   if (!id) {
-//     return;
-//   }
-//   const res = await QuestionControllerService.getQuestionVoByIdUsingGet(
-//     id as any
-//   );
-//   if (res.code === 0) {
-//     form.value = res.data as any;
-//     console.log(2);
-//     console.log(form);
-//   } else {
-//     ElMessage.error("加载失败：" + res.message);
-//   }
-//
-//   console.log(res);
-// };
-// onMounted(() => {
-//   loadData();
-//   submitData.value.questionId = route.query.id as any;
-// });
+
+const loadData = async () => {
+  const id = route.query.id;
+  if (!id) {
+    return;
+  }
+  const res = await ProblemControllerService.getProblem(id as any);
+  if (res.code === 0) {
+    form.value = res.data as any;
+    console.log(form.value);
+  } else {
+    ElMessage.error("加载失败：" + res.message);
+  }
+};
+onBeforeMount(() => {
+  loadData();
+  submitData.value.questionId = route.query.id as any;
+});
 </script>
 
 <style scoped>
