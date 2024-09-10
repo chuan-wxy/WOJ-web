@@ -66,17 +66,14 @@ const barData = reactive([
           {
             title: "查找题目",
             index: "1-1",
-            path: "/add",
           },
           {
             title: "新建课程",
             index: "1-1",
-            path: "/add",
           },
           {
             title: "添加题目",
-            index: "1-1",
-            path: "/add",
+            index: "/admin/addproblem",
           },
         ],
       },
@@ -97,5 +94,8 @@ const barData = reactive([
 
 #sidebar :deep(.el-menu-item.is-active) {
   background-color: var(--border-color);
+}
+:deep(.el-col) {
+  max-width: 100%;
 }
 </style>
