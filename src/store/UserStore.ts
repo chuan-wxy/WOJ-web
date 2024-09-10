@@ -33,6 +33,7 @@ export const useUserStore = defineStore("user", {
   },
   getters: {},
   actions: {
+    // 清除过期信息
     clearUserInfo() {
       (this.userInfo.jwt = ""),
         (this.userInfo.userAccount = null),
@@ -54,7 +55,7 @@ export const useUserStore = defineStore("user", {
     async checkJWT(JWT: string) {
       const res = await UserControllerService.checkJwt(JWT);
       if (res && res.code === 0) {
-        if (res.data) {
+        if (res.data === true) {
           localStorage.removeItem("user");
           this.clearUserInfo();
         }
