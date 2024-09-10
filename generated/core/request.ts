@@ -19,8 +19,8 @@ axios.interceptors.request.use(
     const tokenStr = localStorage.getItem("user");
     if (tokenStr) {
       try {
-        const tokenObj = JSON.parse(tokenStr) as { JWT: string };
-        const jwt = tokenObj.JWT;
+        const tokenObj = JSON.parse(tokenStr);
+        const jwt = tokenObj.userInfo.jwt;
         if (jwt) {
           config.headers["Authorization"] = jwt;
         }
