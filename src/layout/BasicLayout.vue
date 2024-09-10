@@ -2,7 +2,7 @@
   <div id="basicLayout">
     <div class="common-layout">
       <el-container>
-        <el-aside width="200px" class="left-side">side </el-aside>
+        <el-aside width="200px" class="left-side">side</el-aside>
         <el-container>
           <el-header class="header">
             <HeaderMenu />
