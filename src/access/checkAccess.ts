@@ -11,7 +11,7 @@ const checkAccess = (loginRole: any, need = ACCESS_ENUM.NOT_LOGIN) => {
   if (need === ACCESS_ENUM.NOT_LOGIN) {
     return true;
   }
-  if (need === ACCESS_ENUM.USER) {
+  if (need === ACCESS_ENUM.DEFAULT_USER) {
     if (loginRole === ACCESS_ENUM.NOT_LOGIN) {
       return false;
     }
