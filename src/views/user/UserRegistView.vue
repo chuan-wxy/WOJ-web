@@ -146,6 +146,7 @@ const login = async () => {
   if (result.code === 0) {
     ElMessage.success("登陆成功");
     userStore.userInfo = result.data as any;
+    userStore.getUserRole();
     commonStore.setActiveIndex(0);
     router.push({
       path: "/",
