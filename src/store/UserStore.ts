@@ -22,7 +22,7 @@ export const useUserStore = defineStore("user", {
         titleColor: "",
         createTime: "",
       },
-      userRole: null,
+      userRole: [],
     };
   },
   persist: {
@@ -50,7 +50,7 @@ export const useUserStore = defineStore("user", {
         (this.userInfo.titleName = ""),
         (this.userInfo.titleColor = ""),
         (this.userInfo.createTime = ""),
-        (this.userRole = null);
+        (this.userRole = []);
     },
     async checkJWT(JWT: string) {
       const res = await UserControllerService.checkJwt(JWT);
@@ -65,6 +65,14 @@ export const useUserStore = defineStore("user", {
     },
     async getLoginUser() {
       const res = await UserControllerService.getLoginUser();
+      if (res && res.code === 0) {
+        this.userInfo = res.data as any;
+      }
+    },
+    async getUserRole() {
+      const res = await UserControllerService.getRole(
+        this.userInfo.userAccount as any
+      );
       if (res && res.code === 0) {
         this.userInfo = res.data as any;
       }
