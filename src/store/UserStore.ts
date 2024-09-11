@@ -22,7 +22,7 @@ export const useUserStore = defineStore("user", {
         titleColor: "",
         createTime: "",
       },
-      userRole: [],
+      userRole: ["not_login"],
     };
   },
   persist: {
@@ -74,7 +74,7 @@ export const useUserStore = defineStore("user", {
         this.userInfo.userAccount as any
       );
       if (res && res.code === 0) {
-        this.userInfo = res.data as any;
+        this.userRole = res.data as any;
       }
     },
   },
