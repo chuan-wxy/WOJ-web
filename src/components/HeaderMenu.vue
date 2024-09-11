@@ -1,3 +1,149 @@
+<template>
+  <div id="header" :class="{ wide: isWide }">
+    <div class="header-menu">
+      <router-link
+        v-for="(item, index) in userBar"
+        :key="index"
+        :index="index"
+        :to="item.path"
+        :class="{ 'is-active': index === commonStore.isActiveIndexOfBar }"
+      >
+        {{ item.name }}
+      </router-link>
+    </div>
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Search"
+        @focus="isWide = true"
+        @blur="isWide = false"
+      />
+    </div>
+    <div
+      class="admin header-menu"
+      v-if="
+        userStore.userRole.includes('admin') ||
+        userStore.userRole.includes('root')
+      "
+    >
+      <router-link
+        v-for="(item, index) in adminBar"
+        :key="index"
+        :index="index"
+        :to="item.path"
+        :class="{ 'is-active': index + 3 === commonStore.isActiveIndexOfBar }"
+      >
+        {{ item.name }}
+      </router-link>
+    </div>
+    <div class="header-profile">
+      <div class="dark-light" @click="changeTheme()">
+        <svg
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          stroke-width="1.5"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+        </svg>
+      </div>
+      <div class="avatar-bar" v-if="userStore.userInfo.userAccount !== null">
+        <el-dropdown trigger="click" @command="handleCommand">
+          <el-avatar shape="square" :src="userStore.userInfo.avatar" />
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item command="/user/profile"
+                >个人信息
+              </el-dropdown-item>
+              <el-dropdown-item @click="logout()">退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+      <div class="header-menu" v-else>
+        <router-link
+          to="/login"
+          :class="{ 'is-active': 10 === commonStore.isActiveIndexOfBar }"
+          @click="commonStore.setActiveIndex(10)"
+          >登录
+        </router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import router from "@/router";
+import { onBeforeMount, ref } from "vue";
+import { useUserStore } from "@/store/UserStore";
+import { useCommonStore } from "@/store/CommonStore";
+
+const userStore = useUserStore();
+const commonStore = useCommonStore();
+const userInfo = ref();
+
+const handleCommand = (command: string | number | object) => {
+  router.push({
+    path: command as string,
+  });
+};
+
+const seleteKey = ref(["/"]);
+// 选中项
+// 搜索选中是置true
+const isWide = ref(false);
+const userBar = ref([
+  {
+    name: "首页",
+    path: "/home",
+  },
+  {
+    name: "课程",
+    path: "/activity",
+  },
+  {
+    name: "题库",
+    path: "/problem",
+  },
+]);
+const adminBar = ref([
+  {
+    name: "管理",
+    path: "/admin",
+  },
+]);
+
+// const visibleRoutes = computed(() => {
+//   if (!userStore.userRole.includes("admin")) return [];
+//   const routes = router.getRoutes();
+//   return routes.filter((item, index) => {
+//     if (item.meta?.isHide === true) {
+//       return false;
+//     }
+//     if (item.meta?.premission === PERMISSION_ENUM.MANGE) {
+//       return true;
+//     } else return false;
+//   });
+// });
+
+const changeTheme = () => {
+  document.body.classList.toggle("light-mode");
+};
+
+const logout = () => {
+  userStore.clearUserInfo();
+};
+
+onBeforeMount(() => {
+  userInfo.value = userStore.userInfo;
+});
+//监听路由跳转，路由跳转后
+router.afterEach((to, from, failure) => {
+  seleteKey.value = [to.path];
+});
+</script>
 <style scoped>
 #header {
   width: 100%;
@@ -102,130 +248,3 @@
   transition: 0.5s;
 }
 </style>
-<template>
-  <div id="header" :class="{ wide: isWide }">
-    <div class="header-menu">
-      <router-link
-        v-for="(item, index) in userBar"
-        :key="index"
-        :index="index"
-        :to="item.path"
-        :class="{ 'is-active': index === commonStore.isActiveIndexOfBar }"
-      >
-        {{ item.name }}
-      </router-link>
-    </div>
-    <div class="search-bar">
-      <input
-        type="text"
-        placeholder="Search"
-        @focus="isWide = true"
-        @blur="isWide = false"
-      />
-    </div>
-    <div class="admin header-menu">
-      <router-link
-        v-for="(item, index) in adminBar"
-        :key="index"
-        :index="index"
-        :to="item.path"
-        :class="{ 'is-active': index + 3 === commonStore.isActiveIndexOfBar }"
-      >
-        {{ item.name }}
-      </router-link>
-    </div>
-    <div class="header-profile">
-      <div class="dark-light" @click="changeTheme()">
-        <svg
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          stroke-width="1.5"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
-        </svg>
-      </div>
-      <div class="avatar-bar" v-if="userStore.userInfo.userAccount !== null">
-        <el-dropdown trigger="click" @command="handleCommand">
-          <el-avatar shape="square" :src="userStore.userInfo.avatar" />
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item command="/user/profile"
-                >个人信息
-              </el-dropdown-item>
-              <el-dropdown-item @click="logout()">退出登录</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </div>
-      <div class="header-menu" v-else>
-        <router-link
-          to="/login"
-          :class="{ 'is-active': 10 === commonStore.isActiveIndexOfBar }"
-          @click="commonStore.setActiveIndex(10)"
-          >登录
-        </router-link>
-      </div>
-    </div>
-  </div>
-</template>
-
-<script setup lang="ts">
-import router from "@/router";
-import { onBeforeMount, ref } from "vue";
-import { useUserStore } from "@/store/UserStore";
-import { useCommonStore } from "@/store/CommonStore";
-
-const userStore = useUserStore();
-const commonStore = useCommonStore();
-const userInfo = ref();
-
-const handleCommand = (command: string | number | object) => {
-  router.push({
-    path: command as string,
-  });
-};
-
-const seleteKey = ref(["/"]);
-// 选中项
-// 搜索选中是置true
-const isWide = ref(false);
-const userBar = ref([
-  {
-    name: "首页",
-    path: "/home",
-  },
-  {
-    name: "课程",
-    path: "/activity",
-  },
-  {
-    name: "题库",
-    path: "/problem",
-  },
-]);
-const adminBar = ref([
-  {
-    name: "管理",
-    path: "/admin",
-  },
-]);
-
-const changeTheme = () => {
-  document.body.classList.toggle("light-mode");
-};
-
-const logout = () => {
-  userStore.clearUserInfo();
-};
-
-onBeforeMount(() => {
-  userInfo.value = userStore.userInfo;
-});
-//监听路由跳转，路由跳转后
-router.afterEach((to, from, failure) => {
-  seleteKey.value = [to.path];
-});
-</script>
