@@ -3,6 +3,8 @@ import HomeView from "@/views/HomeView.vue";
 import ProblemView from "@/views/question/ProblemListView.vue";
 import UserRegistView from "@/views/user/UserRegistView.vue";
 import ACCESS_ENUM from "@/access/accessEnum";
+import accessEnum from "@/access/accessEnum";
+import AccessEnum from "@/access/accessEnum";
 import { useUserStore } from "@/store/UserStore";
 import { useCommonStore } from "@/store/CommonStore";
 import AdminView from "@/views/admin/AdminView.vue";
@@ -10,8 +12,10 @@ import BasicLayout from "@/layout/BasicLayout.vue";
 import TestView from "@/views/admin/TestView.vue";
 import UserProfileView from "@/views/user/UserProfileView.vue";
 import ProblemContentView from "@/views/question/ProblemContentView.vue";
-import AddQuesitonView from "@/views/admin/AddProblemView.vue";
 import AddProblemView from "@/views/admin/AddProblemView.vue";
+import { ElMessage } from "element-plus";
+import checkAccess from "@/access/checkAccess";
+import PERMISSION_ENUM from "@/access/permissionEnum";
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -36,6 +40,9 @@ const router = createRouter({
           path: "/admin",
           name: "Admin",
           component: AdminView,
+          meta: {
+            access: ACCESS_ENUM.ADMIN,
+          },
           children: [
             {
               path: "/admin/test",
@@ -140,7 +147,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore();
   const commonStore = useCommonStore();
-  const userRole = userStore.userRole;
+  const userRole: string[] = userStore.userRole;
 
   if (to.path === "/home") {
     commonStore.setActiveIndex(0);
@@ -154,18 +161,77 @@ router.beforeEach((to, from, next) => {
     commonStore.setActiveIndex(-1);
   }
 
-  const needAccess = (to.meta?.access as string) ?? ACCESS_ENUM.NOT_LOGIN;
-  if (needAccess === ACCESS_ENUM.NOT_LOGIN) {
+  const needAccess = (to.meta?.access as string) ?? PERMISSION_ENUM.NO;
+  // 不需要特殊权限
+  if (needAccess === PERMISSION_ENUM.NO) {
     next();
+  } else {
+    if (!userRole) {
+      ElMessage.error("请先登录");
+      next(`/login?redirect=${to.path}`);
+    }
+    // 需要提交权限
+    if (needAccess === PERMISSION_ENUM.SUBMIT) {
+      if (
+        userRole.indexOf(ACCESS_ENUM.NO_SUBMIT_USER) === -1 &&
+        userRole.indexOf(accessEnum.NO_SUBMIT_MUTE_USER) === -1 &&
+        userRole.indexOf(AccessEnum.NO_SUBMIT_NO_DISCUSS_USER) === -1
+      ) {
+        next();
+      } else {
+        next("/NoAuth");
+      }
+    }
+    // 需要发帖权限,需要讨论权限
+    if (
+      needAccess === PERMISSION_ENUM.POST_MESSAGE ||
+      needAccess === PERMISSION_ENUM.DISCUSS
+    ) {
+      if (
+        userRole.indexOf(ACCESS_ENUM.NO_DISCUSS_USER) === -1 &&
+        userRole.indexOf(accessEnum.MUTE_USER) === -1 &&
+        userRole.indexOf(AccessEnum.NO_SUBMIT_NO_DISCUSS_USER) === -1 &&
+        userRole.indexOf(AccessEnum.NO_SUBMIT_MUTE_USER) === -1
+      ) {
+        next();
+      } else {
+        next("/NoAuth");
+      }
+    }
+    // 需要管理权限
+    if (needAccess === PERMISSION_ENUM.MANGE) {
+      if (
+        userRole.indexOf(ACCESS_ENUM.ROOT) === 1 ||
+        userRole.indexOf(accessEnum.ADMIN) === 1
+      ) {
+        next();
+      } else {
+        next("/NoAuth");
+      }
+    }
+    // 需要题目管理权限
+    if (needAccess === PERMISSION_ENUM.PROBLEM_MANGE) {
+      if (
+        userRole.indexOf(ACCESS_ENUM.ROOT) === 1 ||
+        userRole.indexOf(accessEnum.ADMIN) === 1 ||
+        userRole.indexOf(accessEnum.PROBLEM_ADMIN) === 1
+      ) {
+        next();
+      } else {
+        next("/NoAuth");
+      }
+    }
+    // 需要回复权限
+    if (needAccess === PERMISSION_ENUM.REPLY) {
+      if (
+        userRole.indexOf(ACCESS_ENUM.MUTE_USER) === -1 &&
+        userRole.indexOf(accessEnum.NO_SUBMIT_MUTE_USER) === -1
+      ) {
+        next();
+      } else {
+        next("/NoAuth");
+      }
+    }
   }
-  // if (needAccess === ACCESS_ENUM.ADMIN) {
-  //   if (!userRole) {
-  //     ElMessage.error("请先登录");
-  //     next(`/login?redirect=${to.path}`);
-  //   }
-  //   if (!checkAccess(userRole ?? ACCESS_ENUM.NOT_LOGIN, ACCESS_ENUM.ADMIN)) {
-  //     next("/NoAuth");
-  //   }
-  // }
 });
 export default router;
