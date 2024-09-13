@@ -1,8 +1,9 @@
 /**
  * 权限定义
  */
+
 const ACCESS_ENUM = {
-  NOT_LOGIN: "notLogin",
+  NOT_LOGIN: "not_login",
   ROOT: "root",
   ADMIN: "admin",
   DEFAULT_USER: "default_user",
