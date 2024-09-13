@@ -28,7 +28,9 @@
               class="emailcode"
               v-model="registerData.captcha"
             />
-            <button @click="getRegisterCode()">获取验证码</button>
+            <button ref="getRegisterCodeButton" @click="getRegisterCode()">
+              {{ BUttonText }}
+            </button>
           </div>
           <input
             type="password"
@@ -97,7 +99,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import {
   UserControllerService,
   UserLoginDTO,
@@ -107,11 +109,14 @@ import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import { useUserStore } from "@/store/UserStore";
 import { useCommonStore } from "@/store/CommonStore";
-import { OpenAPI } from "../../../generated";
 
 const router = useRouter();
 const userStore = useUserStore();
 const commonStore = useCommonStore();
+const BUttonText = ref("发送验证码");
+const second = ref(60);
+const getRegisterCodeButton = ref(null);
+const timeId = ref(null);
 const registerData = reactive({
   userAccount: "",
   userPassword: "",
@@ -125,6 +130,18 @@ const getRegisterCode = async () => {
   if (res.code !== 0) {
     ElMessage.error(res.message);
   }
+  getRegisterCodeButton.value.disabled = true;
+  timeId.value = setInterval(() => {
+    BUttonText.value = second.value--;
+    if (second.value < 0) {
+      second.value = 60;
+      if (timeId.value !== null && timeId.value !== "") {
+        clearInterval(timeId.value);
+      }
+      BUttonText.value = "发送验证码";
+      getRegisterCodeButton.value.disabled = false;
+    }
+  }, 1000);
 };
 const regist = async () => {
   const result = await UserControllerService.register(registerData);
@@ -267,12 +284,18 @@ input {
   width: 65%;
   position: relative;
 }
+.email {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
 
 .email button {
-  width: 35%;
+  width: 100px;
+  height: 40px;
   position: relative;
-
-  border-radius: 20px;
+  margin-left: 10px;
+  border-radius: 5px;
   border: 1px solid #ff4b2b;
   background-color: #ff4b2b;
   color: #ffffff;
