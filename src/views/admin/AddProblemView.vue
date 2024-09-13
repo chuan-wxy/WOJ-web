@@ -42,41 +42,17 @@
           </a-form-item>
         </a-space>
       </a-form-item>
-      <!--      <div>测试用例</div>-->
-      <!--      <a-form-item-->
-      <!--        v-for="(judgeCaseItem, index) of form.judgeCase"-->
-      <!--        :label="`测试用例${index}`"-->
-      <!--        :key="index"-->
-      <!--      >-->
-      <!--        <a-space align="center">-->
-      <!--          <a-form-item-->
-      <!--            :field="`form.judgeCase[${index}].input`"-->
-      <!--            :label="`输入`"-->
-      <!--            :key="index"-->
-      <!--          >-->
-      <!--            <a-input-->
-      <!--              v-model="judgeCaseItem.input"-->
-      <!--              placeholder="请输入测试输入用例"-->
-      <!--            />-->
-      <!--          </a-form-item>-->
-      <!--          <a-form-item-->
-      <!--            :field="`form.judgeCase[${index}].output`"-->
-      <!--            :label="`输出`"-->
-      <!--            :key="index"-->
-      <!--          >-->
-      <!--            <a-input-->
-      <!--              v-model="judgeCaseItem.output"-->
-      <!--              placeholder="请输入测试输出用例"-->
-      <!--            />-->
-      <!--          </a-form-item>-->
-      <!--          <a-button @click="handleDelete(index)" :style="{ marginLeft: '10px' }"-->
-      <!--            >删除-->
-      <!--          </a-button>-->
-      <!--        </a-space>-->
-      <!--      </a-form-item>-->
-      <!--      <div>-->
-      <!--        <a-button @click="handleAdd">新增测试用例</a-button>-->
-      <!--      </div>-->
+      <el-upload
+        class="upload-demo"
+        drag
+        headers="POST"
+        action="http://localhost:8088/api/file/upload-judgelist"
+        multiple
+        :data="fileData"
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      </el-upload>
       <a-button status="success" @click="addQuestion()">提交</a-button>
     </div>
   </div>
@@ -90,9 +66,13 @@ import { ElMessage } from "element-plus";
 import { ProblemControllerService } from "../../../generated/services/ProblemControllerService";
 import { useUserStore } from "@/store/UserStore";
 import { ProblemVO } from "../../../generated/models/ProblemVO";
+import { ProblemAddDTO } from "../../../generated/models/ProblemAddDTO";
 
 const route = useRoute();
 const userStore = useUserStore();
+const fileData = ref({
+  pid: "hahah",
+});
 const form = ref({
   problemId: "",
   title: "",
@@ -110,7 +90,7 @@ const form = ref({
   judgeMode: "default",
   spjCode: "",
   spjLanguage: "",
-} as ProblemVO);
+} as ProblemAddDTO);
 
 const addQuestion = async () => {
   form.value.author = userStore.userInfo.userName;
