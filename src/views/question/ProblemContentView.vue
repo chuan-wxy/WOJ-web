@@ -8,10 +8,7 @@
       </div>
       <br />
       <div>
-        <CodeEditor
-          :value="submitData.code"
-          :handle-change="onAnswerMdchange"
-        />
+        <CodeEditor ref="codeEditor" :value="submitData.code" />
       </div>
       <div>
         <a-button @click="submit">提交</a-button>
@@ -33,11 +30,14 @@ import highlight from "@bytemd/plugin-highlight";
 import { ProblemControllerService } from "../../../generated/services/ProblemControllerService";
 import { ElMessage } from "element-plus";
 import CodeEditor from "@/components/CodeEditor.vue";
+import { ProblemSubmitControllerService } from "../../../generated/services/ProblemSubmitControllerService";
 
 const route = useRoute();
 const isState = ref(true);
 const isHide = ref(true);
 const message = ref("");
+const codeEditor = ref();
+
 const form = ref({
   id: 0,
   problemId: 0,
@@ -57,28 +57,26 @@ const plugins = [gfm(), highlight()];
 const submitData = ref({
   language: "c++",
   code: "",
-  questionId: 0,
+  pid: 0,
 });
-const onAnswerMdchange = (v: string) => {
-  submitData.value.code = v;
+
+const submit = async () => {
+  isState.value = false;
+  isHide.value = false;
+  //先清空以前的数据
+  message.value = "";
+  submitData.value.code = codeEditor.value.codeEditorData;
+  const result = await ProblemSubmitControllerService.doSubmit(
+    submitData.value
+  );
+  isState.value = true;
+  if (result.code === 0) {
+    message.value = result.message ?? "";
+    ElMessage.success("添加成功");
+  } else {
+    ElMessage.error("添加失败：" + result.message);
+  }
 };
-// const submit = async () => {
-//   isState.value = false;
-//   isHide.value = false;
-//   //先清空以前的数据
-//   message.value = "";
-//   const result = await QuestionSubmitControllerService.doQuestioSubmitUsingPost(
-//     submitData.value
-//   );
-//   isState.value = true;
-//   console.log(result);
-//   if (result.code === 0) {
-//     message.value = result.data.judgeInfo.message;
-//     ElMessage.success("添加成功");
-//   } else {
-//     ElMessage.error("添加失败：" + result.message);
-//   }
-// };
 
 const loadData = async () => {
   const id = route.query.id;
@@ -95,7 +93,7 @@ const loadData = async () => {
 };
 onBeforeMount(() => {
   loadData();
-  submitData.value.questionId = route.query.id as any;
+  submitData.value.pid = route.query.id as any;
 });
 </script>
 
