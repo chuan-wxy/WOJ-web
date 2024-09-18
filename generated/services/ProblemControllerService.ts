@@ -4,25 +4,23 @@ import type { BaseResponsePageProblemTitleVO } from "../models/BaseResponsePageP
 import type { BaseResponseProblemVO } from "../models/BaseResponseProblemVO";
 import type { BaseResponseString } from "../models/BaseResponseString";
 import type { ProblemAddDTO } from "../models/ProblemAddDTO";
-import type { TagAddDTO } from "../models/TagAddDTO";
 import type { CancelablePromise } from "../core/CancelablePromise";
 import { OpenAPI } from "../core/OpenAPI";
 import { request as __request } from "../core/request";
 
 export class ProblemControllerService {
   /**
-   * @param requestBody
+   * @param tagName
    * @returns BaseResponseString OK
    * @throws ApiError
    */
-  public static addTag(
-    requestBody: TagAddDTO
-  ): CancelablePromise<BaseResponseString> {
+  public static addTag(tagName: string): CancelablePromise<BaseResponseString> {
     return __request(OpenAPI, {
       method: "POST",
       url: "/problem/add-tag",
-      body: requestBody,
-      mediaType: "application/json",
+      query: {
+        tagName: tagName,
+      },
     });
   }
 

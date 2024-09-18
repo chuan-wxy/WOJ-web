@@ -11,6 +11,7 @@ import UserProfileView from "@/views/user/UserProfileView.vue";
 import ProblemContentView from "@/views/question/ProblemContentView.vue";
 import AddProblemView from "@/views/admin/AddProblemView.vue";
 import PERMISSION_ENUM from "@/access/permissionEnum";
+import CodeEditor from "@/components/CodeEditor.vue";
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
@@ -55,6 +56,11 @@ const router = createRouter({
           path: "/user/profile",
           name: "个人信息",
           component: UserProfileView,
+        },
+        {
+          path: "/codeeditor",
+          name: "codeeditor",
+          component: CodeEditor,
         },
         {
           path: "/login",
