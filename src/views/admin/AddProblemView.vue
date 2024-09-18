@@ -62,7 +62,7 @@
 import { onMounted, ref } from "vue";
 import MdEditor from "@/components/MdEditor.vue";
 import { useRoute } from "vue-router";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 import { ProblemControllerService } from "../../../generated/services/ProblemControllerService";
 import { useUserStore } from "@/store/UserStore";
 import { ProblemVO } from "../../../generated/models/ProblemVO";
@@ -97,6 +97,29 @@ const addQuestion = async () => {
   const result = await ProblemControllerService.addProblem(form.value);
   if (result.code === 0) {
     ElMessage.success("添加成功");
+  } else if (result.code === 201) {
+    ElMessageBox.confirm("没有该标签，是否创建？", "Warning", {
+      confirmButtonText: "添加",
+      cancelButtonText: "取消",
+      type: "warning",
+    })
+      .then(() => {
+        if (Array.isArray(form.value.tagList)) {
+          for (const s of form.value.tagList) {
+            ProblemControllerService.addTag(s);
+          }
+        }
+        ElMessage({
+          type: "success",
+          message: "添加成功",
+        });
+      })
+      .catch(() => {
+        ElMessage({
+          type: "info",
+          message: "取消添加",
+        });
+      });
   } else {
     ElMessage.error("添加失败：" + result.message);
   }
