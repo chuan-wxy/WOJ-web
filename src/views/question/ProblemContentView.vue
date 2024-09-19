@@ -2,9 +2,8 @@
   <div id="problem-content">
     <div class="panel-body">
       <h2>{{ form.title }}</h2>
-      <br />
       <div class="content">
-        <div>{{ form.description }}</div>
+        <Viewer :value="form.description" />
       </div>
       <br />
       <div>
@@ -31,7 +30,22 @@ import { ProblemControllerService } from "../../../generated/services/ProblemCon
 import { ElMessage } from "element-plus";
 import CodeEditor from "@/components/CodeEditor.vue";
 import { ProblemSubmitControllerService } from "../../../generated/services/ProblemSubmitControllerService";
+import { Viewer } from "@bytemd/vue-next";
 
+const value = ref(
+  "给定你一个长度为 n 的整数数列。\n" +
+    "\n" +
+    "请你使用快速排序对这个数列按照从小到大进行排序。\n" +
+    "\n" +
+    "并将排好序的数列按顺序输出。\n" +
+    "\n" +
+    "#### 输入格式\n" +
+    "\n" +
+    "输入共两行，第一行包含整数 n 。\n" +
+    "\n" +
+    "第二行包含 n 个整数（所有整数均在 1∼109\n" +
+    " 范围内），表示整个数列。"
+);
 const route = useRoute();
 const isState = ref(true);
 const isHide = ref(true);
