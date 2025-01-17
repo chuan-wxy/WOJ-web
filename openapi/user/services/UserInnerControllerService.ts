@@ -34,6 +34,22 @@ export class UserInnerControllerService {
         });
     }
     /**
+     * @param userAccount
+     * @returns User OK
+     * @throws ApiError
+     */
+    public static getByAccount(
+        userAccount: string,
+    ): CancelablePromise<User> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/inner/get/by/useraccount',
+            query: {
+                'userAccount': userAccount,
+            },
+        });
+    }
+    /**
      * @param id
      * @returns User OK
      * @throws ApiError

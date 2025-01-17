@@ -8,7 +8,7 @@ import type {
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import axios from 'axios';
+import axios from '../../../src/utils/axios';
 import FormData from 'form-data';
 
 import {ApiError} from './ApiError';
@@ -17,50 +17,6 @@ import type {ApiResult} from './ApiResult';
 import type {OnCancel} from './CancelablePromise';
 import {CancelablePromise} from './CancelablePromise';
 import type {OpenAPIConfig} from './OpenAPI';
-import {ElMessage} from "element-plus";
-import router from '../../../src/router'
-
-axios.interceptors.request.use(
-    function (config) {
-        const tokenStr = localStorage.getItem("user");
-        if (tokenStr) {
-            try {
-                const tokenObj = JSON.parse(tokenStr);
-                const jwt = tokenObj.userInfo.jwt;
-                if (jwt) {
-                    config.headers["Authorization"] = jwt;
-                }
-            } catch (error) {
-                console.error("Failed to parse token from localStorage:", error);
-            }
-        }
-        return config;
-    },
-    function (error) {
-        return Promise.reject(error);
-    }
-);
-
-axios.interceptors.response.use(
-    function (response) {
-        const data = response.data;
-        if(data.code === 401) {
-            // 请token
-            localStorage.removeItem("user");
-            router.push('/login');
-            console.log("登录过期")
-            ElMessage.error("登陆过期，请重新登录。");
-            return Promise.reject(new Error('Unauthorized'));
-        }else if(data.code !== 200 && data.code !== 0) {
-            ElMessage.error(data.message);
-        }
-        return response;
-    },
-    function (error) {
-        ElMessage.error("请求失败，错误信息"+error.message);
-        return Promise.reject(error);
-    }
-)
 
 export const isDefined = <T>(value: T | null | undefined): value is Exclude<T, null | undefined> => {
     return value !== undefined && value !== null;

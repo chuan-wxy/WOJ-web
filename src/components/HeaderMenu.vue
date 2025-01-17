@@ -25,8 +25,9 @@
 <script setup>
 import {onMounted, ref} from "vue";
 import {useUserStore} from "@/store/UserStore";
-import {useCommonStore} from "@/store/CommonStore";
 import router from "@/router";
+import {UserControllerService} from "../../openapi/user/index.ts";
+import {ElMessage} from "element-plus";
 
 const userStore = useUserStore();
 const userInfo = ref();
@@ -54,10 +55,15 @@ const changeTheme = () => {
   document.body.classList.toggle("light-mode");
 };
 
-const logout = () => {
+const logout = async () => {
+
+  await UserControllerService.logout();
+
   userStore.clearUserInfo();
 
-  // router.push("/home");
+  ElMessage.success("退出登录")
+
+  router.push("/common/home");
 };
 
 const paths = ref("");
