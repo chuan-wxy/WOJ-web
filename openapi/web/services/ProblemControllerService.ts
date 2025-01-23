@@ -5,6 +5,7 @@
 import type { BaseResponseIPageProblemTitleVO } from '../models/BaseResponseIPageProblemTitleVO';
 import type { BaseResponseListTagVO } from '../models/BaseResponseListTagVO';
 import type { BaseResponsePageProblemTitleVO } from '../models/BaseResponsePageProblemTitleVO';
+import type { BaseResponseProblemInformation } from '../models/BaseResponseProblemInformation';
 import type { BaseResponseProblemVO } from '../models/BaseResponseProblemVO';
 import type { BaseResponseString } from '../models/BaseResponseString';
 import type { ProblemAddDTO } from '../models/ProblemAddDTO';
@@ -149,6 +150,22 @@ export class ProblemControllerService {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/problem/get-problemtaglist',
+        });
+    }
+    /**
+     * @param id
+     * @returns BaseResponseProblemInformation OK
+     * @throws ApiError
+     */
+    public static getProblemInformation(
+        id: number,
+    ): CancelablePromise<BaseResponseProblemInformation> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/problem/get-probleminformation',
+            query: {
+                'id': id,
+            },
         });
     }
     /**

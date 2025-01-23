@@ -12,6 +12,7 @@ import ArcoVue from '@arco-design/web-vue';
 import 'element-plus/dist/index.css'
 import '@arco-design/web-vue/dist/arco.css';
 import "bytemd/dist/index.css";
+import "@/assets/global.css"
 import { createPinia } from "pinia";
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 

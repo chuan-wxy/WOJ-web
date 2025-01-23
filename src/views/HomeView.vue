@@ -1,8 +1,8 @@
 <template>
   <div id="home">
-    <el-row :gutter="20" style="margin:auto; max-width: 1500px">
-      <el-col :span="24" :xs="24" :sm="24" :md="16">
-        <el-card class="box-card" shadow="hover">
+    <el-row :gutter="10" style="margin:auto; max-width: 1500px">
+      <el-col :span="24" :xs="24" :sm="24" :md="16" >
+        <el-card class="woj-box-card" shadow="hover">
           <template #header>
             <div class="card-header">公告栏</div>
           </template>
@@ -23,14 +23,12 @@
             <el-table-column prop="createTime" label="发布时间"/>
           </el-table>
         </el-card>
-        <el-card class="box-card" shadow="hover">
-
+        <el-card class="woj-box-card" shadow="hover">
           <e-charts class="chart" :option="option" />
-
         </el-card>
       </el-col>
-      <el-col :span="24" :xs="24" :sm="24" :md="8">
-        <el-card class="box-card" shadow="hover">
+      <el-col :span="24" :xs="24" :sm="24" :md="8" >
+        <el-card class="woj-box-card" shadow="hover">
           <template #header>
             <div class="card-header">一言
               <el-button type="primary" plain color="#626aef">
@@ -71,30 +69,48 @@ const loadData = async () => {
   }
 };
 
-const data=ref([
-  {value:2,name:'周一'},
-  {value:3,name:'周二'},
-  {value:5,name:'周三'},
-  {value:2,name:'周四'},
-  {value:6,name:'周五'},
-])
-
-const option=computed(()=>{
-  return{
-    xAxis:{
-      type:'category',
-      data:data.value.map(v=>v.name)
-    },
-    yAxis:{
-      type:'value',
-    },
-    series:[
-      {
-        type:'line',
-        data:data.value.map(v=>v.value)
-      }
-    ]
-  }
+const option=ref({
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    top: '5%',
+    left: 'center'
+  },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: false,
+        position: 'center'
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: 40,
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' }
+      ]
+    }
+  ]
 })
 
 onMounted(() => {
@@ -104,7 +120,6 @@ onMounted(() => {
 
 <style scoped>
 .box-card {
-  margin: 10px;
   text-align: center;
 }
 .card-header{

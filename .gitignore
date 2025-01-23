@@ -9,11 +9,12 @@ lerna-debug.log*
 
 node_modules
 dist
+generated
 dist-ssr
 *.local
-generated
 
 # Editor directories and files
+.vscode/
 .vscode/*
 !.vscode/extensions.json
 .idea

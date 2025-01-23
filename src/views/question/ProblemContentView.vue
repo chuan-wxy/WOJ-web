@@ -1,7 +1,7 @@
 <template>
   <div id="problem-content">
     <el-row :gutter="10" style="margin: auto; max-width: 1500px; min-width: 600px;">
-      <el-col :span="24" :xs="24" :sm="24" :md="17">
+      <el-col :span="24" :xs="24" :sm="24" :md="16">
         <el-card shadow="hover">
           <template #header>
             <div class="card-header" style="height: 35px">
@@ -13,7 +13,7 @@
             <WojCodeEditor ref="codeEditor"/>
           </div>
           <div>
-            <a-button @click="submit">提交</a-button>
+            <el-button @click="submit">提交</el-button>
           </div>
           <div :class="[isHide == true ? 'cardIsHide' : 'cardNoHide']">
             代码提交状态：
@@ -22,84 +22,33 @@
           </div>
         </el-card>
       </el-col>
-      <el-col :span="24" :xs="24" :sm="24" :md="7">
+      <el-col :span="24" :xs="24" :sm="24" :md="8">
         <el-card shadow="hover">
           <template #header>
             <div class="card-header">
               <div class="stat-item clickable">
-                <div class="stat-number">6</div>
+                <div class="stat-number">{{ problemInformationData.acnum }}</div>
                 <div class="stat-label">通过</div>
               </div>
               <div data-v-22ef7511="" class="stat-divider"></div>
               <div class="stat-item clickable">
-                <div class="stat-number">16</div>
+                <div class="stat-number"> {{ problemInformationData.subnum }}</div>
                 <div class="stat-label">提交</div>
               </div>
             </div>
           </template>
         </el-card>
+        <el-card class="woj-box-card" shadow="hover">
+          <e-charts class="chart" :option="option"/>
+        </el-card>
+
       </el-col>
-
     </el-row>
-
-
-    <!--    <div class="panel-body" style="display: flex">-->
-    <!--      <div-->
-    <!--        class="panel-right"-->
-    <!--        style="background-color: blue; height: calc(100vh - 80px); width: 42%"-->
-    <!--      >-->
-    <!--        <el-tabs-->
-    <!--          type="border-card"-->
-    <!--          style="height: calc(100vh - 80px)"-->
-    <!--          class="demo-tabs"-->
-    <!--        >-->
-    <!--          <el-tab-pane>-->
-    <!--            <template #label>-->
-    <!--              <span class="custom-tabs-label">-->
-    <!--                <el-icon><calendar /></el-icon>-->
-    <!--                <span>题目描述</span>-->
-    <!--              </span>-->
-    <!--            </template>-->
-    <!--            <h2>{{ problemData.title }}</h2>-->
-    <!--            <div class="content" draggable="true">-->
-    <!--              <Viewer :value="problemData.description" :plugins="plugins" />-->
-    <!--            </div>-->
-    <!--          </el-tab-pane>-->
-    <!--          <el-tab-pane label="题目信息">题目信息</el-tab-pane>-->
-    <!--          <el-tab-pane label="提交记录">提交记录</el-tab-pane>-->
-    <!--        </el-tabs>-->
-    <!--      </div>-->
-    <!--      <div-->
-    <!--        class="panel-right"-->
-    <!--        style="background-color: blue; height: calc(100vh - 80px); width: 42%"-->
-    <!--      >-->
-    <!--        <el-tabs-->
-    <!--          type="border-card"-->
-    <!--          style="height: calc(100vh - 80px)"-->
-    <!--          class="demo-tabs"-->
-    <!--        >-->
-    <!--          <el-tab-pane label="题目信息">-->
-    <!--            <div>-->
-    <!--              <WojCodeEditor ref="codeEditor" />-->
-    <!--            </div>-->
-    <!--            <div>-->
-    <!--              <a-button @click="submit">提交</a-button>-->
-    <!--            </div>-->
-    <!--            <div :class="[isHide == true ? 'cardIsHide' : 'cardNoHide']">-->
-    <!--              代码提交状态：-->
-    <!--              <a-spin :class="[isState == true ? 'isHide' : 'noHide']" />-->
-    <!--              {{ message }}-->
-    <!--            </div>-->
-    <!--          </el-tab-pane>-->
-    <!--          <el-tab-pane label="提交记录">提交记录</el-tab-pane>-->
-    <!--        </el-tabs>-->
-    <!--      </div>-->
-    <!--    </div>-->
   </div>
 </template>
 
 <script setup lang="ts">
-import {onBeforeMount, ref} from "vue";
+import {computed, onBeforeMount, ref} from "vue";
 import {Viewer} from "@bytemd/vue-next";
 import {useRoute} from "vue-router";
 import {
@@ -107,26 +56,13 @@ import {
   ProblemSubmitControllerService,
 } from "../../../openapi/web";
 import {ElMessage} from "element-plus";
-import gfm from "@bytemd/plugin-gfm";
-import math from "@bytemd/plugin-math-ssr";
-import highlight from "@bytemd/plugin-highlight-ssr";
-import gemoji from "@bytemd/plugin-gemoji"
 import WojCodeEditor from "@/components/WojCodeEditor.vue";
-import {Calendar} from "@element-plus/icons-vue";
-import MdEditor from "@/components/MdEditor.vue";
 
 const route = useRoute();
 const isState = ref(true);
 const isHide = ref(true);
 const message = ref("");
 const codeEditor = ref();
-
-const plugins = [
-  gfm(),
-  math(),
-  highlight(),
-  gemoji()
-];
 
 const problemData = ref({
   id: 0,
@@ -142,10 +78,65 @@ const problemData = ref({
   auth: 0,
 });
 
+const problemInformationData = ref({
+  subnum:0,
+  acnum:0
+});
+
+const EchartData = ref([
+  { value: 1048, name: 'AC' },
+  { value: 735, name: 'SF' },
+  { value: 580, name: 'WA ' },
+  { value: 484, name: 'MLE' },
+  { value: 300, name: 'TLE' },
+  { value: 310, name: 'RE' },
+  { value: 310, name: 'CE' }
+]);
+
 const submitData = ref({
   language: "c++",
   code: "",
   pid: 0,
+});
+
+const option = ref({
+  tooltip: {
+    trigger: 'item',
+    formatter: '{a} <br/>{b} : {c} ({d}%)'
+  },
+  legend: {
+    top: '5%',
+    left: 'center'
+  },
+  color: ['#3FD28D', '#607D8B','red','blue','purple','#00E5EE','pink'],
+  series: [
+    {
+      name: '提交统计',
+      type: 'pie',
+      radius: ['20%', '50%'],
+      avoidLabelOverlap: true,
+      itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: false,
+        position: 'center'
+      },
+      emphasis: {
+        label: {
+          show: false,
+          fontSize: 20,
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+      data: EchartData.value
+    }
+  ]
 });
 
 const submit = async () => {
@@ -165,13 +156,35 @@ const submit = async () => {
       submitData.value
   );
   isState.value = true;
+  console.log(result);
   if (result.code === 0) {
-    message.value = result.data.judgeInfo.message ?? "";
     ElMessage.success("提交成功");
+    message.value = result.data.result ?? "";
   } else {
     ElMessage.error("提交失败：" + result.message);
   }
+  loadInformationData();
 };
+
+const loadInformationData = async () => {
+  const id = route.query.id;
+  if (!id) {
+    return;
+  }
+  const res = await ProblemControllerService.getProblemInformation(id);
+  if (res.code === 0) {
+    problemInformationData.value = res.data as any;
+  } else {
+    ElMessage.error("统计数据加载失败：" + res.message);
+  }
+  EchartData.value[0].value = problemInformationData.value.acnum;
+  EchartData.value[1].value = problemInformationData.value.sfnum;
+  EchartData.value[2].value = problemInformationData.value.wanum;
+  EchartData.value[3].value = problemInformationData.value.mlenum;
+  EchartData.value[4].value = problemInformationData.value.tlenum;
+  EchartData.value[5].value = problemInformationData.value.renum;
+  EchartData.value[6].value = problemInformationData.value.cenum;
+}
 
 const loadData = async () => {
   const id = route.query.id;
@@ -182,11 +195,13 @@ const loadData = async () => {
   if (res.code === 0) {
     problemData.value = res.data as any;
   } else {
-    ElMessage.error("加载失败：" + res.message);
+    ElMessage.error("题目信息加载失败：" + res.message);
+    return;
   }
 };
 onBeforeMount(() => {
   loadData();
+  loadInformationData();
   submitData.value.pid = route.query.id as any;
 });
 </script>
@@ -247,5 +262,9 @@ onBeforeMount(() => {
 
 .noHide {
   display: block;
+}
+
+.chart {
+  height: 400px;
 }
 </style>

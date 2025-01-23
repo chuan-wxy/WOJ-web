@@ -4,7 +4,7 @@ import WojFooter from "@/components/WojFooter.vue";
 </script>
 
 <template>
-  <div id="layout" style="min-height: 100vh; position: relative">
+  <div id="layout">
     <el-container>
       <el-header>
         <HeaderMenu />
@@ -21,6 +21,9 @@ import WojFooter from "@/components/WojFooter.vue";
 
 <style scoped>
 #layout {
+  width: 85vw;
+  min-height: 100vh;
+  position: relative;
   padding: 0;
   margin: 0;
 }
