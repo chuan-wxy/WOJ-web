@@ -43,69 +43,69 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, reactive } from "vue";
-import { useUserStore } from "@/store/UserStore";
-import { UserControllerService } from "../../../openapi/user";
-import { ElMessage } from "element-plus";
+  import { onBeforeMount, reactive } from 'vue'
+  import { useUserStore } from '@/store/modules/user'
+  import { UserControllerService } from '@/openapi/user'
+  import { ElMessage } from 'element-plus'
 
-const userStore = useUserStore();
+  const userStore = useUserStore()
 
-let userProfile = reactive({
-  userAccount: "",
-  userName: "",
-  userProfile: "",
-  school: "",
-  course: "",
-  number: "",
-  gender: "",
-  github: "",
-  blog: "",
-  avatar: "",
-  signature: "",
-  titleName: "",
-  titleColor: "",
-  createTime: "",
-});
+  let userProfile = reactive({
+    userAccount: '',
+    userName: '',
+    userProfile: '',
+    school: '',
+    course: '',
+    number: '',
+    gender: '',
+    github: '',
+    blog: '',
+    avatar: '',
+    signature: '',
+    titleName: '',
+    titleColor: '',
+    createTime: ''
+  })
 
-const onSubmit = async () => {
-  const res = await UserControllerService.updateProfile(userProfile);
-  if (res.code === 0) {
-    ElMessage.success("修改成功");
-  } else {
-    ElMessage.error("修改失败" + res.data);
+  const onSubmit = async () => {
+    const res = await UserControllerService.updateProfile(userProfile)
+    if (res.code === 0) {
+      ElMessage.success('修改成功')
+    } else {
+      ElMessage.error('修改失败' + res.data)
+    }
   }
-};
-const loadData = () => {
-  userProfile = userStore.userInfo as any;
-};
+  const loadData = () => {
+    userProfile = userStore.userInfo as any
+  }
 
-onBeforeMount(() => {
-  loadData();
-});
+  onBeforeMount(() => {
+    loadData()
+  })
 </script>
 
 <style scoped>
-#userprofile >>> .el-form-item__content div,
-#userprofile >>> .el-form-item__content > div,
-#userprofile >>> .el-popper {
-  background-color: rgba(0, 0, 0, 0%) !important;
-  box-shadow: 0 0 0 1px var(--border-color);
-}
+  #userprofile >>> .el-form-item__content div,
+  #userprofile >>> .el-form-item__content > div,
+  #userprofile >>> .el-popper {
+    background-color: rgba(0, 0, 0, 0%) !important;
+    box-shadow: 0 0 0 1px var(--border-color);
+  }
 
-#userprofile >>> .el-form-item__label,
-#userprofile >>> .el-input__inner {
-  color: var(--theme-color);
-}
+  #userprofile >>> .el-form-item__label,
+  #userprofile >>> .el-input__inner {
+    color: var(--theme-color);
+  }
 
-#userprofile >>> .el-select-dropdown__item.is-hovering,
-#userprofile >>> .is-hovering,
-#userprofile >>> .el-popper,
-#userprofile >>> .el-scrollbar li {
-  background-color: rgba(0, 0, 0, 0%) !important;
-}
+  #userprofile >>> .el-select-dropdown__item.is-hovering,
+  #userprofile >>> .is-hovering,
+  #userprofile >>> .el-popper,
+  #userprofile >>> .el-scrollbar li {
+    background-color: rgba(0, 0, 0, 0%) !important;
+  }
 
-#userprofile >>> .el-select__selection,
-#userprofile >>> .el-select__selected-item {
-  box-shadow: 0 0 0 0px var(--border-color) !important;
-}
+  #userprofile >>> .el-select__selection,
+  #userprofile >>> .el-select__selected-item {
+    box-shadow: 0 0 0 0px var(--border-color) !important;
+  }
 </style>

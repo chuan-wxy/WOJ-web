@@ -10,70 +10,70 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
-import { CourseControllerService } from "../../../openapi/web";
-import { useRouter } from "vue-router";
+  import { onMounted, ref } from 'vue'
+  import { CourseControllerService } from '@/openapi/web'
+  import { useRouter } from 'vue-router'
 
-const data = ref();
+  const data = ref()
 
-const loadData = async () => {
-  const res = await CourseControllerService.getFirst();
-  data.value = res.data;
-};
+  const loadData = async () => {
+    const res = await CourseControllerService.getFirst()
+    data.value = res.data
+  }
 
-const router = useRouter();
+  const router = useRouter()
 
-const goto = (id: string) => {
-  router.push({
-    path: "/course/content",
-    query: {
-      id: id,
-    },
-  });
-};
+  const goto = (id: string) => {
+    router.push({
+      path: '/course/content',
+      query: {
+        id: id
+      }
+    })
+  }
 
-onMounted(() => {
-  loadData();
-});
+  onMounted(() => {
+    loadData()
+  })
 </script>
 
 <style scoped>
-.dataBox {
-  color: var(--theme-color);
-  padding-bottom: 40px;
-}
+  .dataBox {
+    color: var(--theme-color);
+    padding-bottom: 40px;
+  }
 
-h2 {
-  text-align: center;
-}
+  h2 {
+    text-align: center;
+  }
 
-:deep(.arco-list-item-meta-title) {
-  color: var(--theme-color);
-  font-size: 24px;
-}
+  :deep(.arco-list-item-meta-title) {
+    color: var(--theme-color);
+    font-size: 24px;
+  }
 
-:deep(.arco-list-item-meta-description) {
-  color: var(--theme-color);
-}
+  :deep(.arco-list-item-meta-description) {
+    color: var(--theme-color);
+  }
 
-:deep(.el-menu) {
-  background-color: var(--theme-bg-color);
-}
+  :deep(.el-menu) {
+    background-color: var(--theme-bg-color);
+  }
 
-:deep(.el-sub-menu__title) {
-  color: var(--theme-color);
-}
+  :deep(.el-sub-menu__title) {
+    color: var(--theme-color);
+  }
 
-:deep(.el-sub-menu__title:hover) {
-  background-color: var(--hover-menu-bg);
-}
+  :deep(.el-sub-menu__title:hover) {
+    background-color: var(--hover-menu-bg);
+  }
 
-:deep(.el-menu-item:hover) {
-  background-color: var(--hover-menu-bg);
-}
+  :deep(.el-menu-item:hover) {
+    background-color: var(--hover-menu-bg);
+  }
 
-:deep(.el-menu-item) {
-  color: var(--theme-color);
-  background-color: var(--theme-bg-color);
-}
+  :deep(.el-menu-item) {
+    color: var(--theme-color);
+    background-color: var(--theme-bg-color);
+  }
 </style>

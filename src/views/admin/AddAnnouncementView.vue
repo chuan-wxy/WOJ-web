@@ -17,42 +17,39 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { ElMessage } from "element-plus";
-import MdEditor from "@/components/MdEditor.vue";
-import {
-  AnnouncementAddDTO,
-  AnnouncementControllerService,
-} from "../../../openapi/web";
+  import { ref } from 'vue'
+  import { ElMessage } from 'element-plus'
+  import MdEditor from '@/components/MdEditor.vue'
+  import { AnnouncementAddDTO, AnnouncementControllerService } from '@/openapi/web'
 
-// 新建课程请求体
-const form = ref({
-  title: "",
-  content: "",
-} as AnnouncementAddDTO);
+  // 新建课程请求体
+  const form = ref({
+    title: '',
+    content: ''
+  } as AnnouncementAddDTO)
 
-const onContentMdchange = (v: string) => {
-  form.value.content = v;
-};
-
-const onSubmit = async () => {
-  const res = await AnnouncementControllerService.addAnnouncement(form.value);
-  if (res.code === 0) {
-    ElMessage.success("添加成功");
-  } else {
-    ElMessage.error("添加失败：" + res.message);
+  const onContentMdchange = (v: string) => {
+    form.value.content = v
   }
-};
+
+  const onSubmit = async () => {
+    const res = await AnnouncementControllerService.addAnnouncement(form.value)
+    if (res.code === 0) {
+      ElMessage.success('添加成功')
+    } else {
+      ElMessage.error('添加失败：' + res.message)
+    }
+  }
 </script>
 
 <style scoped>
-#add-announcement {
-  background: white;
-  width: 100%;
-  margin: auto;
-}
+  #add-announcement {
+    background: white;
+    width: 100%;
+    margin: auto;
+  }
 
-.panel-body {
-  padding: 15px;
-}
+  .panel-body {
+    padding: 15px;
+  }
 </style>

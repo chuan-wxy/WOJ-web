@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "user": "if exist \\\"D:\\GraduateDesign\\WOJ-web\\woj-user-service_OpenAPI.json\\\" ( del /f /q \\\"D:\\GraduateDesign\\WOJ-web\\woj-user-service_OpenAPI.json\\\" && echo 旧文件已删除 ) else ( echo 无旧文件需删除 ) && move I:\\Desktop\\woj-user-service_OpenAPI.json D:\\GraduateDesign\\WOJ-web\\woj-user-service_OpenAPI.json && openapi --input woj-user-service_OpenAPI.json --output ./src/openapi/user --client axios"
   },
   "dependencies": {
     "@iconify/vue": "^4.1.1",
@@ -23,6 +24,7 @@
     "element-plus": "^2.13.1",
     "highlight.js": "^11.10.0",
     "mitt": "^3.0.1",
+    "nprogress": "^0.2.0",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.3.0",
     "tailwindcss": "^4.1.14",

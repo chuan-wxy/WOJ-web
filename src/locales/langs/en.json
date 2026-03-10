@@ -1,0 +1,30 @@
+{
+  "menus": {
+    "common": {
+      "login": "Login"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "home": "Home"
+    },
+    "problem": {
+      "title": "Problem",
+      "allProblem": "AllProblem",
+      "favorProblem": "Favor Problem"
+    },
+    "admin": {
+      "title": "Admin"
+    }
+  },
+  "login": {
+    "placeholder": {
+      "account": "Please enter your account",
+      "password": "Please enter your password"
+    },
+    "forgotPwd": "Forgot your password?",
+    "btnText": "Login"
+  },
+  "register": {
+    "btnText": "Register"
+  }
+}

@@ -1,6 +1,6 @@
 <template>
   <div id="problem-content">
-    <el-row :gutter="10" style="margin: auto; max-width: 1500px; min-width: 600px;">
+    <el-row :gutter="10" style="margin: auto; max-width: 1500px; min-width: 600px">
       <el-col :span="24" :xs="24" :sm="24" :md="16">
         <el-card shadow="hover">
           <template #header>
@@ -8,16 +8,16 @@
               <p class="title">{{ problemData.title }}</p>
             </div>
           </template>
-          <Viewer :value="problemData.description" :plugins="plugins"/>
+          <Viewer :value="problemData.description" :plugins="plugins" />
           <div>
-            <WojCodeEditor ref="codeEditor"/>
+            <WojCodeEditor ref="codeEditor" />
           </div>
           <div>
             <el-button @click="submit">提交</el-button>
           </div>
           <div :class="[isHide == true ? 'cardIsHide' : 'cardNoHide']">
             代码提交状态：
-            <a-spin :class="[isState == true ? 'isHide' : 'noHide']"/>
+            <a-spin :class="[isState == true ? 'isHide' : 'noHide']" />
             {{ message }}
           </div>
         </el-card>
@@ -39,232 +39,222 @@
           </template>
         </el-card>
         <el-card class="woj-box-card" shadow="hover">
-          <e-charts class="chart" :option="option"/>
+          <e-charts class="chart" :option="option" />
         </el-card>
-
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import {computed, onBeforeMount, ref} from "vue";
-import {Viewer} from "@bytemd/vue-next";
-import {useRoute} from "vue-router";
-import {
-  ProblemControllerService,
-  ProblemSubmitControllerService,
-} from "../../../openapi/web";
-import {ElMessage} from "element-plus";
-import WojCodeEditor from "@/components/WojCodeEditor.vue";
+  import { computed, onBeforeMount, ref } from 'vue'
+  import { Viewer } from '@bytemd/vue-next'
+  import { useRoute } from 'vue-router'
+  import { ProblemControllerService, ProblemSubmitControllerService } from '@/openapi/web'
+  import { ElMessage } from 'element-plus'
+  import WojCodeEditor from '@/components/WojCodeEditor.vue'
 
-const route = useRoute();
-const isState = ref(true);
-const isHide = ref(true);
-const message = ref("");
-const codeEditor = ref();
+  const route = useRoute()
+  const isState = ref(true)
+  const isHide = ref(true)
+  const message = ref('')
+  const codeEditor = ref()
 
-const problemData = ref({
-  id: 0,
-  problemId: 0,
-  title: 0,
-  author: "",
-  tagList: [],
-  description: "",
-  input: "",
-  output: "",
-  source: "",
-  difficulty: 0,
-  auth: 0,
-});
+  const problemData = ref({
+    id: 0,
+    problemId: 0,
+    title: 0,
+    author: '',
+    tagList: [],
+    description: '',
+    input: '',
+    output: '',
+    source: '',
+    difficulty: 0,
+    auth: 0
+  })
 
-const problemInformationData = ref({
-  subnum:0,
-  acnum:0
-});
+  const problemInformationData = ref({
+    subnum: 0,
+    acnum: 0
+  })
 
-const EchartData = ref([
-  { value: 1048, name: 'AC' },
-  { value: 735, name: 'SF' },
-  { value: 580, name: 'WA ' },
-  { value: 484, name: 'MLE' },
-  { value: 300, name: 'TLE' },
-  { value: 310, name: 'RE' },
-  { value: 310, name: 'CE' }
-]);
+  const EchartData = ref([
+    { value: 1048, name: 'AC' },
+    { value: 735, name: 'SF' },
+    { value: 580, name: 'WA ' },
+    { value: 484, name: 'MLE' },
+    { value: 300, name: 'TLE' },
+    { value: 310, name: 'RE' },
+    { value: 310, name: 'CE' }
+  ])
 
-const submitData = ref({
-  language: "c++",
-  code: "",
-  pid: 0,
-});
+  const submitData = ref({
+    language: 'c++',
+    code: '',
+    pid: 0
+  })
 
-const option = ref({
-  tooltip: {
-    trigger: 'item',
-    formatter: '{a} <br/>{b} : {c} ({d}%)'
-  },
-  legend: {
-    top: '5%',
-    left: 'center'
-  },
-  color: ['#3FD28D', '#607D8B','red','blue','purple','#00E5EE','pink'],
-  series: [
-    {
-      name: '提交统计',
-      type: 'pie',
-      radius: ['20%', '50%'],
-      avoidLabelOverlap: true,
-      itemStyle: {
-        borderRadius: 10,
-        borderColor: '#fff',
-        borderWidth: 2
-      },
-      label: {
-        show: false,
-        position: 'center'
-      },
-      emphasis: {
+  const option = ref({
+    tooltip: {
+      trigger: 'item',
+      formatter: '{a} <br/>{b} : {c} ({d}%)'
+    },
+    legend: {
+      top: '5%',
+      left: 'center'
+    },
+    color: ['#3FD28D', '#607D8B', 'red', 'blue', 'purple', '#00E5EE', 'pink'],
+    series: [
+      {
+        name: '提交统计',
+        type: 'pie',
+        radius: ['20%', '50%'],
+        avoidLabelOverlap: true,
+        itemStyle: {
+          borderRadius: 10,
+          borderColor: '#fff',
+          borderWidth: 2
+        },
         label: {
           show: false,
-          fontSize: 20,
-          fontWeight: 'bold'
-        }
-      },
-      labelLine: {
-        show: false
-      },
-      data: EchartData.value
+          position: 'center'
+        },
+        emphasis: {
+          label: {
+            show: false,
+            fontSize: 20,
+            fontWeight: 'bold'
+          }
+        },
+        labelLine: {
+          show: false
+        },
+        data: EchartData.value
+      }
+    ]
+  })
+
+  const submit = async () => {
+    if (codeEditor.value.codeEditorData === null || codeEditor.value.codeEditorData === '') {
+      ElMessage.error('代码不能为空')
+      return
     }
-  ]
-});
+    isState.value = false
+    isHide.value = false
+    //先清空以前的数据
+    message.value = ''
+    submitData.value.code = codeEditor.value.codeEditorData
+    const result = await ProblemSubmitControllerService.doSubmit(submitData.value)
+    isState.value = true
+    console.log(result)
+    if (result.code === 0) {
+      ElMessage.success('提交成功')
+      message.value = result.data.result ?? ''
+    } else {
+      ElMessage.error('提交失败：' + result.message)
+    }
+    loadInformationData()
+  }
 
-const submit = async () => {
-  if (
-      codeEditor.value.codeEditorData === null ||
-      codeEditor.value.codeEditorData === ""
-  ) {
-    ElMessage.error("代码不能为空");
-    return;
+  const loadInformationData = async () => {
+    const id = route.query.id
+    if (!id) {
+      return
+    }
+    const res = await ProblemControllerService.getProblemInformation(id)
+    if (res.code === 0) {
+      problemInformationData.value = res.data as any
+    } else {
+      ElMessage.error('统计数据加载失败：' + res.message)
+    }
+    EchartData.value[0].value = problemInformationData.value.acnum
+    EchartData.value[1].value = problemInformationData.value.sfnum
+    EchartData.value[2].value = problemInformationData.value.wanum
+    EchartData.value[3].value = problemInformationData.value.mlenum
+    EchartData.value[4].value = problemInformationData.value.tlenum
+    EchartData.value[5].value = problemInformationData.value.renum
+    EchartData.value[6].value = problemInformationData.value.cenum
   }
-  isState.value = false;
-  isHide.value = false;
-  //先清空以前的数据
-  message.value = "";
-  submitData.value.code = codeEditor.value.codeEditorData;
-  const result = await ProblemSubmitControllerService.doSubmit(
-      submitData.value
-  );
-  isState.value = true;
-  console.log(result);
-  if (result.code === 0) {
-    ElMessage.success("提交成功");
-    message.value = result.data.result ?? "";
-  } else {
-    ElMessage.error("提交失败：" + result.message);
-  }
-  loadInformationData();
-};
 
-const loadInformationData = async () => {
-  const id = route.query.id;
-  if (!id) {
-    return;
+  const loadData = async () => {
+    const id = route.query.id
+    if (!id) {
+      return
+    }
+    const res = await ProblemControllerService.getProblem(id)
+    if (res.code === 0) {
+      problemData.value = res.data as any
+    } else {
+      ElMessage.error('题目信息加载失败：' + res.message)
+      return
+    }
   }
-  const res = await ProblemControllerService.getProblemInformation(id);
-  if (res.code === 0) {
-    problemInformationData.value = res.data as any;
-  } else {
-    ElMessage.error("统计数据加载失败：" + res.message);
-  }
-  EchartData.value[0].value = problemInformationData.value.acnum;
-  EchartData.value[1].value = problemInformationData.value.sfnum;
-  EchartData.value[2].value = problemInformationData.value.wanum;
-  EchartData.value[3].value = problemInformationData.value.mlenum;
-  EchartData.value[4].value = problemInformationData.value.tlenum;
-  EchartData.value[5].value = problemInformationData.value.renum;
-  EchartData.value[6].value = problemInformationData.value.cenum;
-}
-
-const loadData = async () => {
-  const id = route.query.id;
-  if (!id) {
-    return;
-  }
-  const res = await ProblemControllerService.getProblem(id);
-  if (res.code === 0) {
-    problemData.value = res.data as any;
-  } else {
-    ElMessage.error("题目信息加载失败：" + res.message);
-    return;
-  }
-};
-onBeforeMount(() => {
-  loadData();
-  loadInformationData();
-  submitData.value.pid = route.query.id as any;
-});
+  onBeforeMount(() => {
+    loadData()
+    loadInformationData()
+    submitData.value.pid = route.query.id as any
+  })
 </script>
 
 <style scoped>
-#problem-content {
-  margin: auto auto;
-  background: rgba(0, 0, 0, 0%);
-}
+  #problem-content {
+    margin: auto auto;
+    background: rgba(0, 0, 0, 0%);
+  }
 
-.card-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  font-weight: bolder;
-  color: #3f3f3f;
-}
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-weight: bolder;
+    color: #3f3f3f;
+  }
 
-.title {
-  margin: 0;
-  font-size: 25px;
-}
+  .title {
+    margin: 0;
+    font-size: 25px;
+  }
 
-.clickable {
-  cursor: pointer;
-  transition: background-color .3s;
-  border-radius: 5px;
-}
+  .clickable {
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-radius: 5px;
+  }
 
-.stat-item {
-  text-align: center;
-  flex: 1;
-}
+  .stat-item {
+    text-align: center;
+    flex: 1;
+  }
 
-.stat-divider {
-  width: 1px;
-  height: 60px;
-  background-color: #e0e0e0;
-  margin: 0 20px;
-}
+  .stat-divider {
+    width: 1px;
+    height: 60px;
+    background-color: #e0e0e0;
+    margin: 0 20px;
+  }
 
+  .panel-body {
+    justify-content: center;
+  }
 
-.panel-body {
-  justify-content: center;
-}
+  .cardIsHide {
+    display: none;
+  }
 
-.cardIsHide {
-  display: none;
-}
+  .cardNoHide {
+    display: block;
+  }
 
-.cardNoHide {
-  display: block;
-}
+  .isHide {
+    display: none;
+  }
 
-.isHide {
-  display: none;
-}
+  .noHide {
+    display: block;
+  }
 
-.noHide {
-  display: block;
-}
-
-.chart {
-  height: 400px;
-}
+  .chart {
+    height: 400px;
+  }
 </style>

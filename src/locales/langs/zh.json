@@ -1,0 +1,30 @@
+{
+  "menus": {
+    "common": {
+      "login": "登录"
+    },
+    "dashboard": {
+      "title": "控制台",
+      "home": "主页"
+    },
+    "problem": {
+      "title": "题库",
+      "allProblem": "全部题库",
+      "favorProblem": "我的收藏"
+    },
+    "admin": {
+      "title": "后台管理"
+    }
+  },
+  "login": {
+    "placeholder": {
+      "account": "请输入账号",
+      "password": "请输入密码"
+    },
+    "forgotPwd": "忘记密码？",
+    "btnText": "登录"
+  },
+  "register": {
+    "btnText": "注册"
+  }
+}
