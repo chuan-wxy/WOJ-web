@@ -1,6 +1,6 @@
 <template>
   <ElConfigProvider size="default" :locale="locales[language]" :z-index="3000">
-    <RouterView></RouterView>
+    <RouterView />
   </ElConfigProvider>
 </template>
 

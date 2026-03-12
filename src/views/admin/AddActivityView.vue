@@ -47,7 +47,7 @@
 
   // 图片上传成功，回调函数
   const handleAvatarSuccess = (response) => {
-    if (response.code === 0) {
+    if (response.code === 200) {
       form.value.avatar = response.data
     } else {
       ElMessage.error('上传失败：{}', response.message)
@@ -60,7 +60,7 @@
 
   const onSubmit = async () => {
     const res = await ActivityControllerService.addActivity(form.value)
-    if (res.code === 0) {
+    if (res.code === 200) {
       ElMessage.success('添加成功')
     } else {
       ElMessage.error('添加失败：' + res.message)

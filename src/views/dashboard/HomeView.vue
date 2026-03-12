@@ -13,7 +13,7 @@
                   style="font-weight: 500"
                   class="rlink"
                   :to="{
-                    name: 'AnnouncementView',
+                    name: 'Announcement',
                     query: { id: scope.row.id }
                   }"
                   >{{ scope.row.title }}
@@ -23,9 +23,9 @@
             <el-table-column prop="createTime" label="发布时间" />
           </el-table>
         </el-card>
-        <el-card class="woj-box-card" shadow="hover">
-          <e-charts class="chart" :option="option" />
-        </el-card>
+        <!--        <el-card class="woj-box-card" shadow="hover">-->
+        <!--          <e-charts class="chart" :option="option" />-->
+        <!--        </el-card>-->
       </el-col>
       <el-col :span="24" :xs="24" :sm="24" :md="8">
         <el-card class="woj-box-card" shadow="hover">
@@ -61,62 +61,64 @@
 
 <script setup lang="ts">
   import { AnnouncementControllerService, AnnouncementTitleVO } from '@/openapi/web'
-  import { computed, onMounted, ref } from 'vue'
+  import { onMounted, ref } from 'vue'
   import { ElMessage } from 'element-plus'
 
   const tableData = ref([] as AnnouncementTitleVO[])
   const loadData = async () => {
     const res = await AnnouncementControllerService.getAnnouncementList()
-    if (res.code === 0) {
+    console.log(res)
+
+    if (res.code === 200) {
       tableData.value = res.data as AnnouncementTitleVO[]
     } else {
       ElMessage.error('加载公告栏失败')
     }
   }
 
-  const option = ref({
-    tooltip: {
-      trigger: 'item'
-    },
-    legend: {
-      top: '5%',
-      left: 'center'
-    },
-    series: [
-      {
-        name: 'Access From',
-        type: 'pie',
-        radius: ['40%', '70%'],
-        avoidLabelOverlap: false,
-        itemStyle: {
-          borderRadius: 10,
-          borderColor: '#fff',
-          borderWidth: 2
-        },
-        label: {
-          show: false,
-          position: 'center'
-        },
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: 40,
-            fontWeight: 'bold'
-          }
-        },
-        labelLine: {
-          show: false
-        },
-        data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' }
-        ]
-      }
-    ]
-  })
+  // const option = ref({
+  //   tooltip: {
+  //     trigger: 'item'
+  //   },
+  //   legend: {
+  //     top: '5%',
+  //     left: 'center'
+  //   },
+  //   series: [
+  //     {
+  //       name: 'Access From',
+  //       type: 'pie',
+  //       radius: ['40%', '70%'],
+  //       avoidLabelOverlap: false,
+  //       itemStyle: {
+  //         borderRadius: 10,
+  //         borderColor: '#fff',
+  //         borderWidth: 2
+  //       },
+  //       label: {
+  //         show: false,
+  //         position: 'center'
+  //       },
+  //       emphasis: {
+  //         label: {
+  //           show: true,
+  //           fontSize: 40,
+  //           fontWeight: 'bold'
+  //         }
+  //       },
+  //       labelLine: {
+  //         show: false
+  //       },
+  //       data: [
+  //         { value: 1048, name: 'Search Engine' },
+  //         { value: 735, name: 'Direct' },
+  //         { value: 580, name: 'Email' },
+  //         { value: 484, name: 'Union Ads' },
+  //         { value: 300, name: 'Video Ads' }
+  //       ]
+  //     }
+  //   ]
+  // })
 
   onMounted(() => {
     loadData()
@@ -124,9 +126,6 @@
 </script>
 
 <style scoped>
-  .box-card {
-    text-align: center;
-  }
   .card-header {
     display: flex;
     justify-content: space-between;

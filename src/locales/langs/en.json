@@ -5,7 +5,8 @@
     },
     "dashboard": {
       "title": "Dashboard",
-      "home": "Home"
+      "home": "Home",
+      "announcement": "Announcement"
     },
     "problem": {
       "title": "Problem",
@@ -14,6 +15,10 @@
     },
     "admin": {
       "title": "Admin"
+    },
+    "system": {
+      "title": "System Settings",
+      "userCenter": "User Center"
     }
   },
   "login": {
@@ -26,5 +31,43 @@
   },
   "register": {
     "btnText": "Register"
+  },
+  "topBar": {
+    "search": {
+      "title": "Search"
+    },
+    "user": {
+      "userCenter": "User center",
+      "docs": "Document",
+      "github": "Github",
+      "lockScreen": "Lock screen",
+      "logout": "Log out"
+    },
+    "guide": {
+      "title": "Click here to view",
+      "theme": "Theme style",
+      "menu": "Open top menu",
+      "description": "More configurations"
+    }
+  },
+  "system": {
+    "title": "Title",
+    "label": {
+      "userName": "User Name",
+      "gender": "Gender",
+      "school": "School",
+      "profile": "Profile",
+      "password": "Password",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "editPassword": "Edit Password",
+      "setting": "Setting"
+    }
+  },
+  "common": {
+    "tips": "Prompt",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "logOutTips": "Do you want to log out?"
   }
 }

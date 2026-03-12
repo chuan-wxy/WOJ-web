@@ -3,7 +3,7 @@
     <ElSubMenu v-if="hasChildren(item)" :index="item.path || item.meta.title" :level="level">
       <template #title>
         <div class="menu-icon flex-cc">
-          <ArtSvgIcon
+          <SvgIcon
             :icon="item.meta.icon"
             :color="theme?.iconColor"
             :style="{ color: theme.iconColor }"
@@ -31,7 +31,7 @@
       @click="goPage(item)"
     >
       <div class="menu-icon flex-cc">
-        <ArtSvgIcon
+        <SvgIcon
           :icon="item.meta.icon"
           :color="theme?.iconColor"
           :style="{ color: theme.iconColor }"

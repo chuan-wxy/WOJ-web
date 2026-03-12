@@ -2,7 +2,7 @@
 <template>
   <div class="app-layout">
     <aside id="app-sidebar">
-      <ArtSidebarMenu />
+      <SidebarMenu />
     </aside>
 
     <main id="app-main">

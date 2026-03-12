@@ -1,24 +1,12 @@
 <!-- 顶部栏 -->
 <template>
-  <div
-    class="w-full bg-[var(--default-bg-color)]"
-    :class="[
-      tabStyle === 'tab-card' || tabStyle === 'tab-google' ? 'mb-5 max-sm:mb-3 !bg-box' : ''
-    ]"
-  >
-    <div
-      class="relative box-border flex-b h-15 leading-15 select-none"
-      :class="[
-        tabStyle === 'tab-card' || tabStyle === 'tab-google'
-          ? 'border-b border-[var(--art-card-border)]'
-          : ''
-      ]"
-    >
+  <div class="w-full bg-[var(--default-bg-color)]">
+    <div class="relative box-border flex-b h-15 leading-15 select-none">
       <div class="flex-c flex-1 min-w-0 leading-15" style="display: flex">
         <Logo class="!hidden pl-3.5 overflow-hidden align-[-0.15em] fill-current" @click="toHome" />
 
         <!--        &lt;!&ndash; 菜单按钮 &ndash;&gt;-->
-        <!--        <ArtIconButton-->
+        <!--        <IconButton-->
         <!--          icon="ri:menu-2-fill"-->
         <!--          class="ml-3 max-sm:ml-[7px]"-->
         <!--          @click="visibleMenu"-->
@@ -34,7 +22,7 @@
 
         <!--        &lt;!&ndash; 快速入口 &ndash;&gt;-->
         <!--        <ArtFastEnter v-if="shouldShowFastEnter && width >= headerBarFastEnterMinWidth">-->
-        <!--          <ArtIconButton icon="ri:function-line" class="ml-3" />-->
+        <!--          <IconButton icon="ri:function-line" class="ml-3" />-->
         <!--        </ArtFastEnter>-->
 
         <!-- 混合菜单-顶部 -->
@@ -44,23 +32,22 @@
       <div class="flex-c gap-2.5">
         <!-- 搜索 -->
         <div
-          v-if="shouldShowGlobalSearch"
           class="flex-cb w-40 h-9 px-2.5 c-p border border-g-400 rounded-custom-sm max-md:!hidden"
           @click="openSearchDialog"
         >
           <div class="flex-c">
-            <ArtSvgIcon icon="ri:search-line" class="text-sm text-g-500" />
+            <SvgIcon icon="ri:search-line" class="text-sm text-g-500" />
             <span class="ml-1 text-xs font-normal text-g-500">{{ $t('topBar.search.title') }}</span>
           </div>
           <div class="flex-c h-5 px-1.5 text-g-500/80 border border-g-400 rounded">
-            <ArtSvgIcon v-if="isWindows" icon="vaadin:ctrl-a" class="text-sm" />
-            <ArtSvgIcon v-else icon="ri:command-fill" class="text-xs" />
+            <SvgIcon v-if="isWindows" icon="vaadin:ctrl-a" class="text-sm" />
+            <SvgIcon v-else icon="ri:command-fill" class="text-xs" />
             <span class="ml-0.5 text-xs">k</span>
           </div>
         </div>
 
         <!-- 全屏按钮 -->
-        <ArtIconButton
+        <IconButton
           :icon="isFullscreen ? 'ri:fullscreen-exit-line' : 'ri:fullscreen-fill'"
           :class="[!isFullscreen ? 'full-screen-btn' : 'exit-full-screen-btn', 'ml-3']"
           class="max-md:!hidden"
@@ -69,7 +56,7 @@
 
         <!-- 国际化按钮 -->
         <ElDropdown @command="changeLanguage" popper-class="langDropDownStyle">
-          <ArtIconButton icon="ri:translate-2" class="language-btn text-[19px]" />
+          <IconButton icon="ri:translate-2" class="language-btn text-[19px]" />
           <template #dropdown>
             <ElDropdownMenu>
               <div v-for="item in languageOptions" :key="item.value" class="lang-btn-item">
@@ -78,7 +65,7 @@
                   :class="{ 'is-selected': locale === item.value }"
                 >
                   <span class="menu-txt">{{ item.label }}</span>
-                  <ArtSvgIcon icon="ri:check-fill" v-if="locale === item.value" />
+                  <SvgIcon icon="ri:check-fill" v-if="locale === item.value" />
                 </ElDropdownItem>
               </div>
             </ElDropdownMenu>
@@ -86,25 +73,25 @@
         </ElDropdown>
 
         <!-- 通知按钮 -->
-        <ArtIconButton
+        <IconButton
           icon="ri:notification-2-line"
           class="notice-button relative"
           @click="visibleNotice"
         >
           <div class="absolute top-2 right-2 size-1.5 !bg-danger rounded-full"></div>
-        </ArtIconButton>
+        </IconButton>
 
         <!-- 聊天按钮 -->
-        <ArtIconButton icon="ri:message-3-line" class="chat-button relative" @click="openChat">
+        <IconButton icon="ri:message-3-line" class="chat-button relative" @click="openChat">
           <div class="breathing-dot absolute top-2 right-2 size-1.5 !bg-success rounded-full"></div>
-        </ArtIconButton>
+        </IconButton>
 
         <!-- 设置按钮 -->
-        <div v-if="shouldShowSettings">
-          <ElPopover :visible="showSettingGuide" placement="bottom-start" :width="190" :offset="0">
+        <div>
+          <ElPopover placement="bottom-start" :width="190" :offset="0">
             <template #reference>
               <div class="flex-cc">
-                <ArtIconButton icon="ri:settings-line" class="setting-btn" @click="openSetting" />
+                <IconButton icon="ri:settings-line" class="setting-btn" @click="openSetting" />
               </div>
             </template>
             <template #default>
@@ -119,7 +106,7 @@
         </div>
 
         <!-- 主题切换按钮 -->
-        <ArtIconButton @click="themeAnimation" :icon="isDark ? 'ri:sun-fill' : 'ri:moon-line'" />
+        <IconButton @click="themeAnimation" :icon="isDark ? 'ri:sun-fill' : 'ri:moon-line'" />
 
         <!-- 用户头像、菜单 -->
         <UserMenu v-if="isLogin" />
@@ -162,14 +149,9 @@
   const { isLogin } = storeToRefs(userStore)
 
   // 顶部栏功能配置
-  const {
-    shouldShowGlobalSearch,
-    shouldShowSettings,
-    fastEnterMinWidth: headerBarFastEnterMinWidth
-  } = useHeaderBar()
+  const { fastEnterMinWidth: headerBarFastEnterMinWidth } = useHeaderBar()
 
-  const { systemThemeColor, showSettingGuide, menuType, isDark, tabStyle } =
-    storeToRefs(settingStore)
+  const { systemThemeColor } = storeToRefs(settingStore)
 
   const { language } = storeToRefs(userStore)
   const { menuList } = storeToRefs(menuStore)

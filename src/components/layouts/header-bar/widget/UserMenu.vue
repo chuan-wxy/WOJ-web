@@ -14,7 +14,7 @@
     <template #reference>
       <img
         class="size-8.5 mr-5 c-p rounded-full max-sm:w-6.5 max-sm:h-6.5 max-sm:mr-[16px]"
-        src="@imgs/user/avatar.webp"
+        :src="userInfo.avatar"
         alt="avatar"
       />
     </template>
@@ -23,31 +23,27 @@
         <div class="flex-c pb-1 px-0">
           <img
             class="w-10 h-10 mr-3 ml-0 overflow-hidden rounded-full float-left"
-            src="@imgs/user/avatar.webp"
+            :src="userInfo.avatar"
           />
           <div class="w-[calc(100%-60px)] h-full">
             <span class="block text-sm font-medium text-g-800 truncate">{{
               userInfo.userName
             }}</span>
-            <span class="block mt-0.5 text-xs text-g-500 truncate">{{ userInfo.email }}</span>
+            <span class="block mt-0.5 text-xs text-g-500 truncate">{{ userInfo.userAccount }}</span>
           </div>
         </div>
         <ul class="py-4 mt-3 border-t border-g-300/80">
           <li class="btn-item" @click="goPage('/system/user-center')">
-            <ArtSvgIcon icon="ri:user-3-line" />
+            <SvgIcon icon="ri:user-3-line" />
             <span>{{ $t('topBar.user.userCenter') }}</span>
           </li>
           <li class="btn-item" @click="toDocs()">
-            <ArtSvgIcon icon="ri:book-2-line" />
+            <SvgIcon icon="ri:book-2-line" />
             <span>{{ $t('topBar.user.docs') }}</span>
           </li>
           <li class="btn-item" @click="toGithub()">
-            <ArtSvgIcon icon="ri:github-line" />
+            <SvgIcon icon="ri:github-line" />
             <span>{{ $t('topBar.user.github') }}</span>
-          </li>
-          <li class="btn-item" @click="lockScreen()">
-            <ArtSvgIcon icon="ri:lock-line" />
-            <span>{{ $t('topBar.user.lockScreen') }}</span>
           </li>
           <div class="w-full h-px my-2 bg-g-300/80"></div>
           <div class="log-out c-p" @click="loginOut">
@@ -66,6 +62,7 @@
   import { useUserStore } from '@/store/modules/user'
   import { WEB_LINKS } from '@/utils/constants/links'
   import { mittBus } from '@/utils/sys'
+  import { UserControllerService } from '@api/user'
 
   defineOptions({ name: 'UserMenu' })
 
@@ -99,25 +96,29 @@
   }
 
   /**
-   * 打开锁屏功能
-   */
-  const lockScreen = (): void => {
-    mittBus.emit('openLockScreen')
-  }
-
-  /**
    * 用户登出确认
    */
   const loginOut = (): void => {
     closeUserMenu()
-    setTimeout(() => {
-      ElMessageBox.confirm(t('common.logOutTips'), t('common.tips'), {
-        confirmButtonText: t('common.confirm'),
-        cancelButtonText: t('common.cancel'),
-        customClass: 'login-out-dialog'
-      }).then(() => {
+    setTimeout(async () => {
+      try {
+        await ElMessageBox.confirm(
+          t('common.logOutTips'), // 登出提示文案
+          t('common.tips'), // 弹窗标题
+          {
+            confirmButtonText: t('common.confirm'), // 确认按钮文案
+            cancelButtonText: t('common.cancel'), // 取消按钮文案
+            customClass: 'login-out-dialog' // 自定义弹窗样式类
+          }
+        )
+
+        // 确认登出：先调用后端登出接口，再执行本地登出逻辑
+        await UserControllerService.logout()
         userStore.logOut()
-      })
+      } catch (error) {
+        // 取消登出时不做任何处理（捕获弹窗取消/关闭的异常）
+        console.log('用户取消登出操作', error)
+      }
     }, 200)
   }
 
@@ -147,7 +148,7 @@
       }
 
       &:hover {
-        background-color: var(--art-gray-200);
+        background-color: var(--woj-gray-200);
       }
     }
   }

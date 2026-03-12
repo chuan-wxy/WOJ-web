@@ -60,13 +60,11 @@ export const useUserStore = defineStore(
         localStorage.setItem(StorageConfig.LAST_USER_ID_KEY, String(currentUserId))
       }
 
-      // 清空用户信息
+      // 清空用户核心状态
       userInfo.value = {}
-      // 重置登录状态
       isLogin.value = false
-      // 清空访问令牌
       accessToken.value = ''
-      // 注意：不清空工作台标签页，等下次登录时根据用户判断
+
       // 移除iframe路由缓存
       sessionStorage.removeItem('iframeRoutes')
       // 清空主页路径
@@ -135,7 +133,7 @@ export const useUserStore = defineStore(
 //     },
 //     async checkJWT(JWT: string) {
 //       const res = await UserControllerService.checkJwt(JWT);
-//       if (res && res.code === 0) {
+//       if (res && res.code === 200) {
 //         if (res.data === true) {
 //           localStorage.removeItem("user");
 //           this.clearUserInfo();
@@ -147,7 +145,7 @@ export const useUserStore = defineStore(
 //     },
 //     async getLoginUser() {
 //       const res = await UserControllerService.getLoginUser();
-//       if (res && res.code === 0) {
+//       if (res && res.code === 200) {
 //         this.userInfo = res.data as any;
 //       }
 //     },
@@ -155,7 +153,7 @@ export const useUserStore = defineStore(
 //       const res = await UserControllerService.getRole(
 //         this.userInfo.userAccount as any
 //       );
-//       if (res && res.code === 0) {
+//       if (res && res.code === 200) {
 //         console.log("res不为空" + res.data);
 //         this.userRole = res.data as any;
 //       } else {

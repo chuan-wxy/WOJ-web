@@ -137,7 +137,6 @@
       isActive: isMenuItemActive(item),
       formattedTitle: formatMenuTitle(item.meta.title)
     }))
-    console.log(res)
     return res
   })
 

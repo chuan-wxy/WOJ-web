@@ -4,12 +4,14 @@
 /* eslint-disable */
 export type ProblemSubmit = {
     id?: number;
-    language?: string;
-    code?: string;
-    judgeInfo?: string;
-    state?: number;
     pid?: number;
     uid?: string;
+    language?: string;
+    code?: string;
+    judgeResult?: string;
+    timeList?: string;
+    memoryList?: string;
+    stackList?: string;
     createtime?: string;
     updatetime?: string;
 };

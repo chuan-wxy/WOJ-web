@@ -115,7 +115,7 @@
 
   const regist = async () => {
     const result = await UserControllerService.register(registerData)
-    if (result.code === 0) {
+    if (result.code === 200) {
       ElMessage.success('注册成功')
       router.push('/')
     } else {
@@ -131,7 +131,7 @@
   const login = async () => {
     const result = await UserControllerService.login(loginData)
 
-    if (result.code === 0) {
+    if (result.code === 200) {
       ElMessage.success('登陆成功')
 
       userStore.userInfo = result.data!

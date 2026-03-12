@@ -59,14 +59,6 @@ const ojRoutes = [
         }
       },
       {
-        path: 'announcement',
-        name: 'AnnouncementView',
-        component: () => import('@/views/announcement/AnnouncementView.vue'),
-        meta: {
-          access: PERMISSION_ENUM.NO
-        }
-      },
-      {
         path: 'course',
         name: 'CourseView',
         component: () => import('@/views/course/CourseView.vue'),
@@ -119,5 +111,3 @@ const ojRoutes = [
     ]
   }
 ]
-
-export default ojRoutes

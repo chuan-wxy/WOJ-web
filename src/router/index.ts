@@ -74,7 +74,7 @@
 //         {
 //           path: 'announcement',
 //           name: 'AnnouncementView',
-//           component: () => import('@/views/announcement/AnnouncementView.vue'),
+//           component: () => import('@/views/announcement/index.vue'),
 //           meta: {
 //             access: PERMISSION_ENUM.NO
 //           }

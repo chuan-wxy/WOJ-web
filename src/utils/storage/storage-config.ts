@@ -39,4 +39,26 @@ export class StorageConfig {
   static createKeyPattern(storeId: string): RegExp {
     return new RegExp(`^${this.STORAGE_PREFIX}[^-]+-${storeId}$`)
   }
+
+  /**
+   * 生成旧版本的存储键名（不带分隔符）
+   * @param version 版本号，默认使用当前版本
+   */
+  static generateLegacyKey(version: string = this.CURRENT_VERSION): string {
+    return `${this.STORAGE_PREFIX}${version}`
+  }
+
+  /**
+   * 创建当前版本存储键匹配的正则表达式
+   */
+  static createCurrentVersionPattern(): RegExp {
+    return new RegExp(`^${this.STORAGE_PREFIX}${this.CURRENT_VERSION}-`)
+  }
+
+  /**
+   * 创建任意版本存储键匹配的正则表达式
+   */
+  static createVersionPattern(): RegExp {
+    return new RegExp(`^${this.STORAGE_PREFIX}`)
+  }
 }

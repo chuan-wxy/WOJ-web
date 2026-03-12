@@ -1,11 +1,23 @@
 import { SETTING_DEFAULT_CONFIG } from '@/config/setting'
 import { setElementThemeColor } from '@utils/ui'
-import { SystemThemeEnum } from '@/enums/appEnum'
+import { ContainerWidthEnum, SystemThemeEnum } from '@/enums/appEnum'
 import { StorageConfig } from '@utils/storage/storage-config'
+import { MenuThemeType } from '@/types/store'
+import AppConfig from '@/config'
 
 export const useSettingStore = defineStore(
   'settingStore',
   () => {
+    // 菜单相关设置
+    /** 菜单类型 */
+    const menuType = ref(SETTING_DEFAULT_CONFIG.menuType)
+    /** 菜单展开宽度 */
+    const menuOpenWidth = ref(SETTING_DEFAULT_CONFIG.menuOpenWidth)
+    /** 菜单是否展开 */
+    const menuOpen = ref(SETTING_DEFAULT_CONFIG.menuOpen)
+    /** 双菜单是否显示文本 */
+    const dualMenuShowText = ref(SETTING_DEFAULT_CONFIG.dualMenuShowText)
+
     /** 是否显示进度条 */
     const showNprogress = ref(SETTING_DEFAULT_CONFIG.showNprogress)
 
@@ -61,6 +73,33 @@ export const useSettingStore = defineStore(
     })
 
     /**
+     * 获取菜单展开宽度
+     */
+    const getMenuOpenWidth = computed((): string => {
+      return menuOpenWidth.value + 'px' || SETTING_DEFAULT_CONFIG.menuOpenWidth + 'px'
+    })
+
+    /**
+     * 获取菜单主题
+     * 根据当前主题类型和暗色模式返回对应的主题配置
+     */
+    const getMenuTheme = computed((): MenuThemeType => {
+      const list = AppConfig.themeList.filter((item) => item.theme === menuThemeType.value)
+      if (isDark.value) {
+        return AppConfig.darkMenuStyles[0]
+      } else {
+        return list[0]
+      }
+    })
+
+    /**
+     * 判断是否为暗色模式
+     */
+    const isDark = computed((): boolean => {
+      return systemThemeType.value === SystemThemeEnum.DARK
+    })
+
+    /**
      * 设置自定义圆角
      * @param radius 圆角值
      */
@@ -99,7 +138,10 @@ export const useSettingStore = defineStore(
       customRadius,
       containerWidth,
       setContainerWidth,
-      reload
+      reload,
+      getMenuOpenWidth,
+      menuType,
+      getMenuTheme
     }
   },
   {

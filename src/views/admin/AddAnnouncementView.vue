@@ -34,7 +34,7 @@
 
   const onSubmit = async () => {
     const res = await AnnouncementControllerService.addAnnouncement(form.value)
-    if (res.code === 0) {
+    if (res.code === 200) {
       ElMessage.success('添加成功')
     } else {
       ElMessage.error('添加失败：' + res.message)

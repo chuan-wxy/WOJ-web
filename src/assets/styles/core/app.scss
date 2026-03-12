@@ -284,6 +284,11 @@
   transform: none !important;
 }
 
+.woj-loading-fix .el-loading-spinner svg {
+  /* 强制取消 Element 默认的旋转动画 */
+  animation: none !important;
+}
+
 // 去除移动端点击背景色
 @media screen and (max-width: 1180px) {
   * {

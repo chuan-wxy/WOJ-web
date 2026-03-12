@@ -2,13 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { JudgeInfo } from './JudgeInfo';
 export type ProblemSubmitVO = {
     id?: number;
-    language?: string;
-    code?: string;
-    judgeInfo?: JudgeInfo;
-    state?: number;
+    result?: string;
+    timeLit?: Array<number>;
+    memoryLit?: Array<number>;
+    stackLit?: Array<number>;
     pid?: number;
     uid?: string;
 };

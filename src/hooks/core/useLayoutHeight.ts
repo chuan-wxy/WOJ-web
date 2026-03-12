@@ -1,21 +1,3 @@
-/**
- * useLayoutHeight - 页面布局高度管理
- *
- * 自动计算和管理页面内容区域的高度，确保内容区域能够正确填充剩余空间。
- * 监听头部元素高度变化，动态调整内容区域高度，避免出现滚动条或布局错乱。
- *
- * ## 主要功能
- *
- * 1. 动态高度计算 - 根据头部元素高度自动计算内容区域高度
- * 2. 响应式监听 - 自动监听元素尺寸变化并更新高度
- * 3. CSS 变量同步 - 自动更新 CSS 变量，方便全局使用
- * 4. 灵活配置 - 支持自定义间距、CSS 变量名等
- * 5. 自动查找模式 - 提供通过 ID 自动查找元素的便捷方式
- *
- * @module useLayoutHeight
- * @author Art Design Pro Team
- */
-
 import { ref, computed, watch, onMounted } from 'vue'
 import { useElementSize } from '@vueuse/core'
 

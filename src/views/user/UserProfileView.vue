@@ -69,7 +69,7 @@
 
   const onSubmit = async () => {
     const res = await UserControllerService.updateProfile(userProfile)
-    if (res.code === 0) {
+    if (res.code === 200) {
       ElMessage.success('修改成功')
     } else {
       ElMessage.error('修改失败' + res.data)

@@ -113,64 +113,7 @@ const getErrorMessage = (status: number): string => {
   return $t(errorMap[status] || 'httpMsg.internalServerError')
 }
 
-/**
- * 处理错误
- * @param error 错误对象
- * @returns 错误对象
- */
-export function handleError(error: AxiosError<ErrorResponse>): never {
-  // 处理取消的请求
-  if (error.code === 'ERR_CANCELED') {
-    console.warn('Request cancelled:', error.message)
-    throw new HttpError($t('httpMsg.requestCancelled'), ApiStatus.error)
-  }
 
-  const statusCode = error.response?.status
-  const errorMessage = error.response?.data?.msg || error.message
-  const requestConfig = error.config
-
-  // 处理网络错误
-  if (!error.response) {
-    throw new HttpError($t('httpMsg.networkError'), ApiStatus.error, {
-      url: requestConfig?.url,
-      method: requestConfig?.method?.toUpperCase()
-    })
-  }
-
-  // 处理 HTTP 状态码错误
-  const message = statusCode
-    ? getErrorMessage(statusCode)
-    : errorMessage || $t('httpMsg.requestFailed')
-  throw new HttpError(message, statusCode || ApiStatus.error, {
-    data: error.response.data,
-    url: requestConfig?.url,
-    method: requestConfig?.method?.toUpperCase()
-  })
-}
-
-/**
- * 显示错误消息
- * @param error 错误对象
- * @param showMessage 是否显示错误消息
- */
-export function showError(error: HttpError, showMessage: boolean = true): void {
-  if (showMessage) {
-    ElMessage.error(error.message)
-  }
-  // 记录错误日志
-  console.error('[HTTP Error]', error.toLogData())
-}
-
-/**
- * 显示成功消息
- * @param message 成功消息
- * @param showMessage 是否显示消息
- */
-export function showSuccess(message: string, showMessage: boolean = true): void {
-  if (showMessage) {
-    ElMessage.success(message)
-  }
-}
 
 /**
  * 判断是否为 HttpError 类型

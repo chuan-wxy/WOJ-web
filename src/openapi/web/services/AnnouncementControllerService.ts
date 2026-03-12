@@ -26,6 +26,16 @@ export class AnnouncementControllerService {
         });
     }
     /**
+     * @returns BaseResponseAnnouncementContentVO OK
+     * @throws ApiError
+     */
+    public static getLastAnnouncement(): CancelablePromise<BaseResponseAnnouncementContentVO> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/announcement/get-last-announcement',
+        });
+    }
+    /**
      * @param id
      * @returns BaseResponseAnnouncementContentVO OK
      * @throws ApiError

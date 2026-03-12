@@ -53,7 +53,12 @@
                 style="width: 350px"
                 @change="getQuestion()"
               >
-                <el-option v-for="tag in tagList" :key="tag" :label="tag.name" :value="tag.name">
+                <el-option
+                  v-for="tag in tagList"
+                  :key="tag.name"
+                  :label="tag.name"
+                  :value="tag.name!"
+                >
                   <el-tag type="info">
                     <span class="tag-text">{{ tag.name }} </span>
                   </el-tag>
@@ -103,7 +108,7 @@
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import { ProblemControllerService } from '@/openapi/web'
+  import { ProblemControllerService, type TagVO } from '@/openapi/web'
   import { ElMessage } from 'element-plus'
 
   const router = useRouter()
@@ -112,6 +117,8 @@
   const size = ref(10)
   const total = ref(0)
   const finished = ref(false)
+
+  const tagList = ref<TagVO[]>([])
 
   const problemList = ref()
 
@@ -155,14 +162,12 @@
     }
   ])
 
-  // 题目标签
-  const tagList = ref([])
   const getTagList = async () => {
     const res = await ProblemControllerService.getProblemTagList()
-    if (res.code !== 0) {
-      ElMessage.error('获取题目标签失败')
-    } else {
+    if (res.code === 200 && res.data != null) {
       tagList.value = res.data
+    } else {
+      ElMessage.error('获取题目标签失败')
     }
   }
 
@@ -174,6 +179,7 @@
       }
     })
   }
+
   const gotoEditById = (id: string) => {
     router.push({
       path: '/admin/addproblem',
@@ -201,7 +207,7 @@
       filter.value.difficulty as any,
       filter.value.title as any
     )
-    if (res.code === 0) {
+    if (res.code === 200) {
       total.value = res.data?.total
       problemList.value = res.data?.records
       finished.value = true

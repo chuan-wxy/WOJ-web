@@ -1,0 +1,28 @@
+/* generated using openapi-typescript-codegen -- do not edit */
+/* istanbul ignore file */
+/* tslint:disable */
+/* eslint-disable */
+export type User = {
+    id?: string;
+    unionid?: string;
+    mpopenid?: string;
+    userAccount?: string;
+    userPassword?: string;
+    userName?: string;
+    profile?: string;
+    school?: string;
+    course?: string;
+    number?: string;
+    gender?: string;
+    github?: string;
+    blog?: string;
+    avatar?: string;
+    signature?: string;
+    titleName?: string;
+    titleColor?: string;
+    status?: number;
+    createTime?: string;
+    updateTime?: string;
+    isDelete?: number;
+};
+

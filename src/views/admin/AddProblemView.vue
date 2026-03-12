@@ -114,7 +114,7 @@
       return
     }
     const res = await ProblemControllerService.getProblem(Number(id))
-    if (res.code === 0 && res.data !== undefined) {
+    if (res.code === 200 && res.data !== undefined) {
       form.value = res.data as ProblemVO
     } else {
       ElMessage.error('加载失败：' + res.message)
@@ -124,7 +124,7 @@
   const addQuestion = async () => {
     form.value.author = userStore.userInfo.userName
     const result = await ProblemControllerService.addProblem(form.value)
-    if (result.code === 0) {
+    if (result.code === 200) {
       ElMessage.success('添加成功')
     } else if (result.code === 201) {
       ElMessageBox.confirm('没有该标签，是否创建？', 'Warning', {
@@ -155,7 +155,7 @@
   }
   const updateQuestion = async () => {
     const result = await ProblemControllerService.updateProblem(form.value)
-    if (result.code === 0) {
+    if (result.code === 200) {
       ElMessage.success('修改成功')
     } else {
       ElMessage.error('修改失败：' + result.message)

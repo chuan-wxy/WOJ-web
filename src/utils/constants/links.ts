@@ -5,21 +5,7 @@
  * @module utils/constants/links
  */
 export const WEB_LINKS = {
-  // 悠悠有品
-  YYYP: 'https://www.youpin898.com/',
+  GITHUB: 'https://github.com/chuan-wxy/WOJ-microservice',
 
-  // BUFF
-  BUFF: 'https://buff.163.com/',
-
-  // C5
-  C5GAME: 'https://www.c5game.com/',
-
-  // ECO
-  ECOSTEAM: 'https://www.ecosteam.cn/',
-
-  // IGXE
-  IGXE: 'https://www.igxe.cn/',
-
-  // Steam-Dt
-  STEAMDT: 'https://steamdt.com/',
+  DOCS: 'https://github.com/chuan-wxy/WOJ-microservice'
 }

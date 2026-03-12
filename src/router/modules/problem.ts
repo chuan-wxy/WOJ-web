@@ -15,7 +15,13 @@ export const problemRoutes: AppRouteRecord = {
       path: 'all',
       name: 'AllProblem',
       component: '/problem/problem-list',
-      meta: { title: 'menus.problem.allProblem', icon: 'ri:book-3-line', keepAlive: true }
+      meta: { title: 'menus.problem.allProblem', icon: 'ri:book-3-line' }
+    },
+    {
+      path: 'favor',
+      name: 'FavorProblem',
+      component: '/problem/favor-problem',
+      meta: { title: 'menus.problem.favorProblem', icon: 'ri:heart-add-line', keepAlive: true }
     }
   ]
 }

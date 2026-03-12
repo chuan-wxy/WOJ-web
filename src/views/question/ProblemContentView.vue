@@ -148,7 +148,7 @@
     const result = await ProblemSubmitControllerService.doSubmit(submitData.value)
     isState.value = true
     console.log(result)
-    if (result.code === 0) {
+    if (result.code === 200) {
       ElMessage.success('提交成功')
       message.value = result.data.result ?? ''
     } else {
@@ -163,7 +163,7 @@
       return
     }
     const res = await ProblemControllerService.getProblemInformation(id)
-    if (res.code === 0) {
+    if (res.code === 200) {
       problemInformationData.value = res.data as any
     } else {
       ElMessage.error('统计数据加载失败：' + res.message)
@@ -183,7 +183,7 @@
       return
     }
     const res = await ProblemControllerService.getProblem(id)
-    if (res.code === 0) {
+    if (res.code === 200) {
       problemData.value = res.data as any
     } else {
       ElMessage.error('题目信息加载失败：' + res.message)

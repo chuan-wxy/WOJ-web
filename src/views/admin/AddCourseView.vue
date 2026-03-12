@@ -103,7 +103,7 @@
 
   // 图片上传成功，回调函数
   const handleAvatarSuccess = (response) => {
-    if (response.code === 0) {
+    if (response.code === 200) {
       form.value.avatar = response.data
     } else {
       ElMessage.error('上传失败：{}', response.message)
@@ -121,7 +121,7 @@
     parentList.value = null
     parent.value = null
     const res = await CourseControllerService.getCourseByLevel(form.value.level as number)
-    if (res.code === 0) {
+    if (res.code === 200) {
       parentList.value = res.data
     } else {
       ElMessage.error(res.message)
@@ -131,7 +131,7 @@
   const onSubmit = async () => {
     form.value.pid = parent.value
     const res = await CourseControllerService.addCourse(form.value)
-    if (res.code === 0) {
+    if (res.code === 200) {
       ElMessage.success('添加成功')
     } else {
       ElMessage.error('添加失败：' + res.message)
@@ -139,7 +139,7 @@
   }
   const updateCourse = async () => {
     const res = await CourseControllerService.updateProblem(form.value)
-    if (res.code === 0) {
+    if (res.code === 200) {
       ElMessage.success('修改成功')
     } else {
       ElMessage.error('修改失败：' + res.message)

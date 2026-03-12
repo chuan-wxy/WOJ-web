@@ -4,7 +4,7 @@
 $menu-height: 42px;
 $menu-icon-size: 20px;
 $menu-font-size: 14px;
-$hover-bg-color: var(--art-gray-200);
+$hover-bg-color: var(--woj-gray-200);
 $popup-menu-height: 40px;
 $popup-menu-padding: 8px;
 $popup-menu-margin: 5px;
@@ -225,14 +225,14 @@ $popup-menu-radius: 6px;
 // 菜单折叠 hover 弹窗样式（浅色主题）
 .el-menu--vertical,
 .el-menu--popup-container {
-  @include popup-menu-base(var(--art-gray-200), var(--art-gray-900), var(--art-gray-200));
+  @include popup-menu-base(var(--woj-gray-200), var(--art-gray-900), var(--woj-gray-200));
 }
 
 // 暗黑模式菜单样式
 .dark {
   .el-menu--vertical,
   .el-menu--popup-container {
-    @include popup-menu-base(var(--art-gray-200), var(--art-gray-900), #292a2e);
+    @include popup-menu-base(var(--woj-gray-200), var(--art-gray-900), #292a2e);
   }
 
   .layout-sidebar {
