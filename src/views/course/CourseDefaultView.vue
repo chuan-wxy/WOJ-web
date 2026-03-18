@@ -1,10 +1,6 @@
 <template>
   <a-list class="dataBox">
-    <a-list-item
-      v-for="(item, index) in data"
-      :key="index"
-      @click="goto(item.id)"
-    >
+    <a-list-item v-for="(item, index) in data" :key="index" @click="goto(item.id)">
       <a-list-item-meta :title="item.name" :description="item.description">
         <template #avatar>
           <a-avatar shape="square">
@@ -17,46 +13,46 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
-import { CourseControllerService } from "../../../generated";
-import { useRouter } from "vue-router";
+  import { onMounted, ref } from 'vue'
+  import { CourseControllerService } from '@api/web/services/CourseControllerService'
+  import { useRouter } from 'vue-router'
 
-const data = ref();
+  const data = ref()
 
-const loadData = async () => {
-  const res = await CourseControllerService.getFirst();
-  data.value = res.data;
-};
+  const loadData = async () => {
+    const res = await CourseControllerService.getFirst()
+    data.value = res.data
+  }
 
-const router = useRouter();
+  const router = useRouter()
 
-const goto = (id: string) => {
-  router.push({
-    path: "/course/content",
-    query: {
-      id: id,
-    },
-  });
-};
+  const goto = (id: string) => {
+    router.push({
+      path: '/course/content',
+      query: {
+        id: id
+      }
+    })
+  }
 
-onMounted(() => {
-  loadData();
-});
+  onMounted(() => {
+    loadData()
+  })
 </script>
 
 <style scoped>
-#courses {
-  height: 800px;
-  width: 75%;
-  margin: auto;
-  justify-content: center;
-}
+  #courses {
+    height: 800px;
+    width: 75%;
+    margin: auto;
+    justify-content: center;
+  }
 
-.dataBox {
-  color: var(--theme-color);
-}
+  .dataBox {
+    color: var(--theme-color);
+  }
 
-h2 {
-  text-align: center;
-}
+  h2 {
+    text-align: center;
+  }
 </style>

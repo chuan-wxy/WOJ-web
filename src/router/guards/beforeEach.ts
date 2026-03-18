@@ -1,40 +1,3 @@
-/**
- * 路由全局前置守卫模块
- *
- * 提供完整的路由导航守卫功�?
- *
- * ## 主要功能
- *
- * - 登录状态验证和重定�?
- * - 动态路由注册和权限控制
- * - 菜单数据获取和处理（前端/后端模式�?
- * - 用户信息获取和缓�?
- * - 页面标题设置
- * - 工作标签页管�?
- * - 进度条和加载动画控制
- * - 静态路由识别和处理
- * - 错误处理和异常跳�?
- *
- * ## 使用场景
- *
- * - 路由跳转前的权限验证
- * - 动态菜单加载和路由注册
- * - 用户登录状态管�?
- * - 页面访问控制
- * - 路由级别的加载状态管�?
- *
- * ## 工作流程
- *
- * 1. 检查登录状态，未登录跳转到登录�?
- * 2. 首次访问时获取用户信息和菜单数据
- * 3. 根据权限动态注册路�?
- * 4. 设置页面标题和工作标签页
- * 5. 处理根路径重定向到首�?
- * 6. 未匹配路由跳转到 404 页面
- *
- * @module router/guards/beforeEach
- * @author Art Design Pro Team
- */
 import type { Router, RouteLocationNormalized, NavigationGuardNext } from 'vue-router'
 import { nextTick } from 'vue'
 import NProgress from 'nprogress'
@@ -50,45 +13,45 @@ import { ApiStatus } from '@/utils/http/status'
 import { isHttpError } from '@/utils/http/error'
 import { RouteRegistry, MenuProcessor, IframeRouteManager, RoutePermissionValidator } from '../core'
 
-// 路由注册器实�?
+// 路由注册器实�?
 let routeRegistry: RouteRegistry | null = null
 
-// 菜单处理器实�?
+// 菜单处理器实�?
 const menuProcessor = new MenuProcessor()
 
-// 跟踪是否需要关�?loading
+// 跟踪是否需要关�?loading
 let pendingLoading = false
 
-// 路由初始化失败标记，防止死循�?
+// 路由初始化失败标记，防止死循�?
 // 一旦设置为 true，只有刷新页面或重新登录才能重置
 let routeInitFailed = false
 
-// 路由初始化进行中标记，防止并发请�?
+// 路由初始化进行中标记，防止并发请�?
 let routeInitInProgress = false
 
 /**
- * 获取 pendingLoading 状�?
+ * 获取 pendingLoading 状�?
  */
 export function getPendingLoading(): boolean {
   return pendingLoading
 }
 
 /**
- * 重置 pendingLoading 状�?
+ * 重置 pendingLoading 状�?
  */
 export function resetPendingLoading(): void {
   pendingLoading = false
 }
 
 /**
- * 获取路由初始化失败状�?
+ * 获取路由初始化失败状�?
  */
 export function getRouteInitFailed(): boolean {
   return routeInitFailed
 }
 
 /**
- * 重置路由初始化状态（用于重新登录场景�?
+ * 重置路由初始化状态（用于重新登录场景�?
  */
 export function resetRouteInitState(): void {
   routeInitFailed = false
@@ -144,7 +107,7 @@ async function handleRouteGuard(
   const userStore = useUserStore()
   const menuStore = useMenuStore()
 
-  // 启动进度�?
+  // 启动进度�?
   if (settingStore.showNprogress) {
     NProgress.start()
   }
@@ -153,7 +116,7 @@ async function handleRouteGuard(
     menuStore.setMenuList(menuProcessor.getPublicMenuList())
   }
 
-  // 1. 检查登录状�?
+  // 1. 检查登录状�?
   if (!handleLoginStatus(to, userStore, next)) {
     return
   }
@@ -170,7 +133,7 @@ async function handleRouteGuard(
     return
   }
 
-  // 3. 处理动态路由注�?
+  // 3. 处理动态路由注�?
   if (!routeRegistry?.isRegistered() && userStore.isLogin) {
     // 防止并发请求（快速连续导航场景）
     if (routeInitInProgress) {
@@ -199,8 +162,8 @@ async function handleRouteGuard(
 }
 
 /**
- * 处理登录状�?
- * @returns true 表示可以继续，false 表示已处理跳�?
+ * 处理登录状�?
+ * @returns true 表示可以继续，false 表示已处理跳�?
  */
 function handleLoginStatus(
   to: RouteLocationNormalized,
@@ -222,7 +185,7 @@ function handleLoginStatus(
 }
 
 /**
- * 检查路由是否为静态路�?
+ * 检查路由是否为静态路�?
  */
 function isStaticRoute(path: string): boolean {
   const normalizePath = (target: string): string => {
@@ -257,7 +220,7 @@ function isStaticRoute(path: string): boolean {
 }
 
 /**
- * 处理动态路由注�?
+ * 处理动态路由注�?
  */
 async function handleDynamicRoutes(
   to: RouteLocationNormalized,
@@ -284,10 +247,10 @@ async function handleDynamicRoutes(
       throw new Error('获取菜单列表失败，请重新登录')
     }
 
-    // 4. 注册动态路�?
+    // 4. 注册动态路�?
     routeRegistry?.register(mergedMenuList)
 
-    // 5. 保存菜单数据�?store
+    // 5. 保存菜单数据�?store
     const menuStore = useMenuStore()
     menuStore.setMenuList(mergedMenuList)
     menuStore.addRemoveRouteFns(routeRegistry?.getRemoveRouteFns() || [])
@@ -300,18 +263,18 @@ async function handleDynamicRoutes(
       homePath.value || '/'
     )
 
-    // 初始化成功，重置进行中标�?
+    // 初始化成功，重置进行中标�?
     routeInitInProgress = false
 
-    // 9. 重新导航到目标路�?
+    // 9. 重新导航到目标路�?
     if (!hasPermission) {
-      // 无权限访问，跳转到首�?
+      // 无权限访问，跳转到首�?
       closeLoading()
 
       // 输出警告信息
-      console.warn(`[RouteGuard] 用户无权限访问路�? ${to.path}，已跳转到首页`)
+      console.warn(`[RouteGuard] 用户无权限访问路�? ${to.path}，已跳转到首页`)
 
-      // 直接跳转到首�?
+      // 直接跳转到首�?
       next({
         path: validatedPath,
         replace: true
@@ -326,7 +289,7 @@ async function handleDynamicRoutes(
       })
     }
   } catch (error) {
-    console.error('[RouteGuard] 动态路由注册失�?', error)
+    console.error('[RouteGuard] 动态路由注册失�?', error)
 
     // 关闭 loading
     closeLoading()
@@ -339,16 +302,16 @@ async function handleDynamicRoutes(
       return
     }
 
-    // 标记初始化失败，防止死循�?
+    // 标记初始化失败，防止死循�?
     routeInitFailed = true
     routeInitInProgress = false
 
-    // 输出详细错误信息，便于排�?
+    // 输出详细错误信息，便于排�?
     if (isHttpError(error)) {
-      console.error(`[RouteGuard] 错误�? ${error.code}, 消息: ${error.message}`)
+      console.error(`[RouteGuard] 错误�? ${error.code}, 消息: ${error.message}`)
     }
 
-    // 跳转�?500 页面，使�?replace 避免产生历史记录
+    // 跳转�?500 页面，使�?replace 避免产生历史记录
     next({ name: 'Exception500', replace: true })
   }
 }
@@ -361,12 +324,12 @@ async function fetchUserInfo(): Promise<void> {
   // const userStore = useUserStore()
   // const data = await fetchGetUserInfo()
   // userStore.setUserInfo(data)
-  // // 检查并清理工作台标签页（如果是不同用户登录�?
+  // // 检查并清理工作台标签页（如果是不同用户登录�?
   // userStore.checkAndClearWorktabs()
 }
 
 /**
- * 重置路由相关状�?
+ * 重置路由相关状�?
  */
 export function resetRouterState(delay: number): void {
   setTimeout(() => {
@@ -383,7 +346,7 @@ export function resetRouterState(delay: number): void {
 }
 
 /**
- * 处理根路径重定向到首�?
+ * 处理根路径重定向到首�?
  * @returns true 表示已处理跳转，false 表示无需跳转
  */
 function handleRootPathRedirect(to: RouteLocationNormalized, next: NavigationGuardNext): boolean {
@@ -401,10 +364,8 @@ function handleRootPathRedirect(to: RouteLocationNormalized, next: NavigationGua
 }
 
 /**
- * 判断是否为未授权错误�?01�?
+ * 判断是否为未授权错误�?01�?
  */
 function isUnauthorizedError(error: unknown): boolean {
   return isHttpError(error) && error.code === ApiStatus.unauthorized
 }
-
-

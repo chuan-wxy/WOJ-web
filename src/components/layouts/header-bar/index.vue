@@ -114,7 +114,7 @@
     </div>
 
     <!-- 通知 -->
-    <ArtNotification v-model:value="showNotice" ref="notice" />
+    <Notification v-model:value="showNotice" ref="notice" />
   </div>
 </template>
 
@@ -133,7 +133,7 @@
   import { useHeaderBar } from '@/hooks/core/useHeaderBar'
   import UserMenu from './widget/UserMenu.vue'
 
-  defineOptions({ name: 'ArtHeaderBar' })
+  defineOptions({ name: 'HeaderBar' })
 
   // 检测操作系统类型
   const isWindows = navigator.userAgent.includes('Windows')
@@ -362,31 +362,31 @@
   }
 
   /* Hover animation classes */
-  .refresh-btn:hover :deep(.art-svg-icon) {
+  .refresh-btn:hover :deep(.woj-svg-icon) {
     animation: rotate180 0.5s;
   }
 
-  .language-btn:hover :deep(.art-svg-icon) {
+  .language-btn:hover :deep(.woj-svg-icon) {
     animation: moveUp 0.4s;
   }
 
-  .setting-btn:hover :deep(.art-svg-icon) {
+  .setting-btn:hover :deep(.woj-svg-icon) {
     animation: rotate180 0.5s;
   }
 
-  .full-screen-btn:hover :deep(.art-svg-icon) {
+  .full-screen-btn:hover :deep(.woj-svg-icon) {
     animation: expand 0.6s forwards;
   }
 
-  .exit-full-screen-btn:hover :deep(.art-svg-icon) {
+  .exit-full-screen-btn:hover :deep(.woj-svg-icon) {
     animation: shrink 0.6s forwards;
   }
 
-  .notice-button:hover :deep(.art-svg-icon) {
+  .notice-button:hover :deep(.woj-svg-icon) {
     animation: shake 0.5s ease-in-out;
   }
 
-  .chat-button:hover :deep(.art-svg-icon) {
+  .chat-button:hover :deep(.woj-svg-icon) {
     animation: shake 0.5s ease-in-out;
   }
 

@@ -57,7 +57,7 @@
   import { useCommon } from '@/hooks/core/useCommon'
   import { useWindowSize, useTimeoutFn } from '@vueuse/core'
 
-  defineOptions({ name: 'ArtSidebarMenu' })
+  defineOptions({ name: 'SidebarMenu' })
 
   const MOBILE_BREAKPOINT = 800
   const ANIMATION_DELAY = 350

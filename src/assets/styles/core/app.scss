@@ -101,62 +101,23 @@
   border: 1px solid var(--woj-card-border);
 }
 
-// 盒子边框
-[data-box-mode='border-mode'] {
-  .page-content,
-  .woj-table-card {
-    border: 1px solid var(--woj-card-border) !important;
-  }
-
-  .woj-card {
-    @include woj-card-base(var(--woj-card-border), none, 4px);
-  }
-
-  .woj-card-sm {
-    @include woj-card-base(var(--woj-card-border), none, 0px);
-  }
-
-  .woj-card-xs {
-    @include woj-card-base(var(--woj-card-border), none, -4px);
-  }
+.page-content,
+.woj-table-card {
+  border: 1px solid var(--woj-card-border) !important;
 }
 
-// 盒子阴影
-[data-box-mode='shadow-mode'] {
-  .page-content,
-  .woj-table-card {
-    box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.04) !important;
-    border: 1px solid var(--woj-gray-200) !important;
-  }
-
-  .layout-sidebar {
-    border-right: 1px solid var(--woj-card-border) !important;
-  }
-
-  .woj-card {
-    @include woj-card-base(
-      var(--woj-gray-200),
-      (0 1px 3px 0 rgba(0, 0, 0, 0.03), 0 1px 2px -1px rgba(0, 0, 0, 0.08)),
-      4px
-    );
-  }
-
-  .woj-card-sm {
-    @include woj-card-base(
-      var(--woj-gray-200),
-      (0 1px 3px 0 rgba(0, 0, 0, 0.03), 0 1px 2px -1px rgba(0, 0, 0, 0.08)),
-      2px
-    );
-  }
-
-  .woj-card-xs {
-    @include woj-card-base(
-      var(--woj-gray-200),
-      (0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 1px -1px rgba(0, 0, 0, 0.08)),
-      -4px
-    );
-  }
+.woj-card {
+  @include woj-card-base(var(--woj-card-border), none, 4px);
 }
+
+.woj-card-sm {
+  @include woj-card-base(var(--woj-card-border), none, 0px);
+}
+
+.woj-card-xs {
+  @include woj-card-base(var(--woj-card-border), none, -4px);
+}
+
 
 // 元素全屏
 .el-full-screen {

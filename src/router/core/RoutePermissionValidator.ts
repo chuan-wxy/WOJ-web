@@ -1,25 +1,3 @@
-/**
- * 路由权限验证模块
- *
- * 提供路由权限验证和路径检查功能
- *
- * ## 主要功能
- *
- * - 验证路径是否在用户菜单权限中
- * - 构建菜单路径集合（扁平化处理）
- * - 支持动态路由参数匹配
- * - 路径前缀匹配
- *
- * ## 使用场景
- *
- * - 路由守卫中验证用户权限
- * - 动态路由注册后的权限检查
- * - 防止用户访问无权限的页面
- *
- * @module router/core/RoutePermissionValidator
- * @author Art Design Pro Team
- */
-
 import type { AppRouteRecord } from '@/types/router'
 
 /**

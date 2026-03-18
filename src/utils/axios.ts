@@ -1,8 +1,7 @@
 import axios from 'axios'
-import router from '../router'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import { StorageKeyManager } from '@utils/storage'
 import { useUserStore } from '@/store/modules/user'
+import { ApiStatus } from '@utils/http/status'
 
 // 创建存储键管理器实例
 const storageKeyManager = new StorageKeyManager()
@@ -10,20 +9,8 @@ const userStore = useUserStore()
 
 axios.interceptors.request.use(
   function (config) {
-    const tokenStr = localStorage.getItem(storageKeyManager.getStorageKey('user'))
-
-    if (tokenStr) {
-      try {
-        const tokenObj = JSON.parse(tokenStr)
-        const jwt = tokenObj.accessToken
-
-        if (jwt) {
-          config.headers['Authorization'] = jwt
-        }
-      } catch (error) {
-        console.error('Failed to parse token from localStorage:', error)
-      }
-    }
+    const { accessToken } = useUserStore()
+    if (accessToken) config.headers.set('Authorization', accessToken)
     return config
   },
   function (error) {
@@ -34,7 +21,8 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   (response) => {
     const { data } = response
-    if (data?.code === 401) {
+
+    if (data?.code === ApiStatus.unauthorized) {
       // 清理用户token
       localStorage.removeItem(storageKeyManager.getStorageKey('user'))
       userStore.logOut()

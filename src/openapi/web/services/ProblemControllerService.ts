@@ -9,6 +9,7 @@ import type { BaseResponseProblemInformation } from '../models/BaseResponseProbl
 import type { BaseResponseProblemVO } from '../models/BaseResponseProblemVO';
 import type { BaseResponseString } from '../models/BaseResponseString';
 import type { ProblemAddDTO } from '../models/ProblemAddDTO';
+import type { ProblemSearchDTO } from '../models/ProblemSearchDTO';
 import type { ProblemUpdateDTO } from '../models/ProblemUpdateDTO';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -25,6 +26,29 @@ export class ProblemControllerService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/problem/update-problem',
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
+    /**
+     * @param current
+     * @param size
+     * @param requestBody
+     * @returns BaseResponsePageProblemTitleVO OK
+     * @throws ApiError
+     */
+    public static getProblemTitleList(
+        current: number,
+        size: number,
+        requestBody: ProblemSearchDTO,
+    ): CancelablePromise<BaseResponsePageProblemTitleVO> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/problem/problemTitleList',
+            query: {
+                'current': current,
+                'size': size,
+            },
             body: requestBody,
             mediaType: 'application/json',
         });

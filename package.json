@@ -19,6 +19,8 @@
     "@bytemd/plugin-highlight-ssr": "^1.21.0",
     "@bytemd/plugin-math-ssr": "^1.21.0",
     "@bytemd/vue-next": "^1.21.0",
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "next",
     "axios": "^1.13.2",
     "dayjs": "^1.11.19",
     "echarts": "^6.0.0",

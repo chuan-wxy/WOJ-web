@@ -9,19 +9,21 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export type { BaseResponseBoolean } from './models/BaseResponseBoolean';
 export type { BaseResponseListString } from './models/BaseResponseListString';
-export type { BaseResponseListUserVO } from './models/BaseResponseListUserVO';
+export type { BaseResponsePageUserAdminVO } from './models/BaseResponsePageUserAdminVO';
 export type { BaseResponseString } from './models/BaseResponseString';
 export type { BaseResponseUserLoginVO } from './models/BaseResponseUserLoginVO';
-export type { BaseResponseUserVO } from './models/BaseResponseUserVO';
 export type { BaseResponseVoid } from './models/BaseResponseVoid';
-export type { Data } from './models/Data';
+export type { OrderItem } from './models/OrderItem';
+export type { PageUserAdminVO } from './models/PageUserAdminVO';
 export type { User } from './models/User';
+export type { UserAdminVO } from './models/UserAdminVO';
 export type { UserLoginDTO } from './models/UserLoginDTO';
 export type { UserLoginVO } from './models/UserLoginVO';
 export type { UserLogoutDTO } from './models/UserLogoutDTO';
 export type { UserPasswordDTO } from './models/UserPasswordDTO';
 export type { UserProfileDTO } from './models/UserProfileDTO';
 export type { UserRegisterDTO } from './models/UserRegisterDTO';
+export type { UserSearchDTO } from './models/UserSearchDTO';
 export type { UserVO } from './models/UserVO';
 
 export { AdminControllerService } from './services/AdminControllerService';

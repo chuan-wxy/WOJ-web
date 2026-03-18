@@ -39,7 +39,7 @@
       </div>
       <div
         v-show="item.meta.showBadge && level === 0 && !menuOpen"
-        class="art-badge"
+        class="woj-badge"
         style="right: 5px"
       />
 

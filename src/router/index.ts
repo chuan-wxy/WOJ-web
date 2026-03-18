@@ -34,7 +34,7 @@
 //         {
 //           path: 'problem/content',
 //           name: 'ProblemContentView',
-//           component: () => import('@/views/question/ProblemContentView.vue'),
+//           component: () => import('@/views/question/index.vue'),
 //           meta: {
 //             access: PERMISSION_ENUM.NO,
 //             title: '题目详情页面',
@@ -106,31 +106,25 @@
 //         {
 //           path: 'addannouncement',
 //           name: 'add-announcement',
-//           component: import('@/views/admin/AddAnnouncementView.vue'),
+//           component: import('@/views/admin/index.vue'),
 //           meta: { access: PERMISSION_ENUM.MANAGE, title: '新增公告' }
 //         },
 //         {
 //           path: 'addactivity',
 //           name: 'add-activity',
-//           component: import('@/views/admin/AddActivityView.vue'),
+//           component: import('@/views/admin/index.vue'),
 //           meta: { access: PERMISSION_ENUM.MANAGE, title: '新增活动' }
-//         },
-//         {
-//           path: 'userlist',
-//           name: 'User-list',
-//           component: () => import('@/views/admin/UserListView.vue'),
-//           meta: { access: PERMISSION_ENUM.MANAGE, title: '用户列表' }
 //         },
 //         {
 //           path: 'addproblem',
 //           name: 'AddProblemView',
-//           component: () => import('@/views/admin/AddProblemView.vue'),
+//           component: () => import('@/views/admin/index.vue'),
 //           meta: { access: PERMISSION_ENUM.MANAGE, title: '新增题目' }
 //         },
 //         {
 //           path: 'addcourse',
 //           name: 'AddCourseView',
-//           component: () => import('@/views/admin/AddCourseView.vue'),
+//           component: () => import('@/views/admin/index.vue'),
 //           meta: { access: PERMISSION_ENUM.MANAGE, title: '新增课程' }
 //         }
 //       ]

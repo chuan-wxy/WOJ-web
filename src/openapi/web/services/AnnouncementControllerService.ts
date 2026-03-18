@@ -3,13 +3,38 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { AnnouncementAddDTO } from '../models/AnnouncementAddDTO';
+import type { AnnouncementSearchDTO } from '../models/AnnouncementSearchDTO';
 import type { BaseResponseAnnouncementContentVO } from '../models/BaseResponseAnnouncementContentVO';
 import type { BaseResponseListAnnouncementTitleVO } from '../models/BaseResponseListAnnouncementTitleVO';
+import type { BaseResponsePageAnnouncementContentVO } from '../models/BaseResponsePageAnnouncementContentVO';
 import type { BaseResponseString } from '../models/BaseResponseString';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class AnnouncementControllerService {
+    /**
+     * @param current
+     * @param size
+     * @param requestBody
+     * @returns BaseResponsePageAnnouncementContentVO OK
+     * @throws ApiError
+     */
+    public static getAnnouncementList(
+        current: number,
+        size: number,
+        requestBody: AnnouncementSearchDTO,
+    ): CancelablePromise<BaseResponsePageAnnouncementContentVO> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/announcement/admin/announcement-list',
+            query: {
+                'current': current,
+                'size': size,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
+        });
+    }
     /**
      * @param requestBody
      * @returns BaseResponseString OK
@@ -20,7 +45,7 @@ export class AnnouncementControllerService {
     ): CancelablePromise<BaseResponseString> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/announcement/add',
+            url: '/announcement/admin/add',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -55,7 +80,7 @@ export class AnnouncementControllerService {
      * @returns BaseResponseListAnnouncementTitleVO OK
      * @throws ApiError
      */
-    public static getAnnouncementList(): CancelablePromise<BaseResponseListAnnouncementTitleVO> {
+    public static getAnnouncementTitleList(): CancelablePromise<BaseResponseListAnnouncementTitleVO> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/announcement/get-announcement-list',

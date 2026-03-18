@@ -4,10 +4,10 @@
 /* eslint-disable */
 import type { ProblemTitleVO } from './ProblemTitleVO';
 export type IPageProblemTitleVO = {
-    size?: number;
     total?: number;
     records?: Array<ProblemTitleVO>;
     current?: number;
     pages?: number;
+    size?: number;
 };
 

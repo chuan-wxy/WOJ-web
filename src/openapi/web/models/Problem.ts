@@ -7,7 +7,6 @@ export type Problem = {
     problemId?: string;
     title?: string;
     author?: string;
-    tagList?: string;
     timeLimit?: number;
     memoryLimit?: number;
     stackLimit?: number;

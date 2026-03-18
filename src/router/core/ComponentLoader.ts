@@ -1,12 +1,3 @@
-/**
- * 组件加载器
- *
- * 负责动态加载 Vue 组件
- *
- * @module router/core/ComponentLoader
- * @author Art Design Pro Team
- */
-
 import { h } from 'vue'
 
 export class ComponentLoader {

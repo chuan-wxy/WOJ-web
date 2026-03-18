@@ -1,12 +1,3 @@
-/**
- * 菜单处理器
- *
- * 负责菜单数据的获取、过滤和处理
- *
- * @module router/core/MenuProcessor
- * @author Art Design Pro Team
- */
-
 import type { AppRouteRecord } from '@/types/router'
 import { useUserStore } from '@/store/modules/user'
 import { asyncRoutes } from '../routes/asyncRoutes'

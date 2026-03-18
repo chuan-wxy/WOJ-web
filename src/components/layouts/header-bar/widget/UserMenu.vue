@@ -61,7 +61,6 @@
   import { ElMessageBox } from 'element-plus'
   import { useUserStore } from '@/store/modules/user'
   import { WEB_LINKS } from '@/utils/constants/links'
-  import { mittBus } from '@/utils/sys'
   import { UserControllerService } from '@api/user'
 
   defineOptions({ name: 'UserMenu' })
@@ -102,21 +101,15 @@
     closeUserMenu()
     setTimeout(async () => {
       try {
-        await ElMessageBox.confirm(
-          t('common.logOutTips'), // 登出提示文案
-          t('common.tips'), // 弹窗标题
-          {
-            confirmButtonText: t('common.confirm'), // 确认按钮文案
-            cancelButtonText: t('common.cancel'), // 取消按钮文案
-            customClass: 'login-out-dialog' // 自定义弹窗样式类
-          }
-        )
+        await ElMessageBox.confirm(t('message.logOutTips'), t('message.tips'), {
+          confirmButtonText: t('message.confirm'),
+          cancelButtonText: t('message.cancel'),
+          customClass: 'login-out-dialog'
+        })
 
-        // 确认登出：先调用后端登出接口，再执行本地登出逻辑
         await UserControllerService.logout()
         userStore.logOut()
       } catch (error) {
-        // 取消登出时不做任何处理（捕获弹窗取消/关闭的异常）
         console.log('用户取消登出操作', error)
       }
     }, 200)
@@ -143,7 +136,7 @@
         @apply text-sm;
       }
 
-      .art-svg-icon {
+      .woj-svg-icon {
         @apply mr-2 text-base;
       }
 

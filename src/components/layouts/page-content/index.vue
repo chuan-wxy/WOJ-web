@@ -2,9 +2,10 @@
 <template>
   <div class="layout-content" :class="{ 'overflow-auto': isFullPage }" :style="containerStyle">
     <div id="app-content-header">
-      <!-- 路由信息调试 -->
-      <!--              v-if="isOpenRouteInfo === 'true'"-->
-      <div class="px-2 py-1.5 mb-3 text-sm text-g-500 bg-g-200 border-full-d rounded-md">
+      <div
+        v-if="isOpenRouteInfo === 'true'"
+        class="px-2 py-1.5 mb-3 text-sm text-g-500 bg-g-200 border-full-d rounded-md"
+      >
         router meta：{{ route.meta }}
       </div>
     </div>
@@ -35,6 +36,9 @@
   import { useSettingStore } from '@/store/modules/setting'
 
   defineOptions({ name: 'PageContent' })
+
+  // 调试
+  const isOpenRouteInfo = ref<boolean>(false)
 
   const route = useRoute()
   const { containerMinHeight } = useAutoLayoutHeight()

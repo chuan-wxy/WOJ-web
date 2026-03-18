@@ -1,166 +1,170 @@
 <template>
-  <div id="problem-list">
-    <div class="panel-body">
-      <h2>在线题库</h2>
-      <el-card class="box-card" shadow="hover">
-        <template #header>
-          <div class="card-header">
-            <el-pagination
-              @current-change="handleCurrentChange"
-              :current-page="current"
-              :page-size="size"
-              :total="total"
-              layout="total, prev, pager, next"
-            />
-          </div>
+  <div class="woj-full-height">
+    <ProblemSearch v-model="searchForm" @search="handleSearch" @reset="resetSearchParams" />
+
+    <ElCard class="woj-table-card" shadow="never">
+      <TableHeader v-model:columns="columnChecks" :loading="loading" @refresh="refreshData">
+        <template #left>
+          <ElSpace wrap>
+            <ElButton @click="showDialog('add')" v-roles="['root']" v-ripple>新增题目</ElButton>
+          </ElSpace>
         </template>
-        <div style="display: inline-flex">
-          <el-form :inline="true" :model="filter">
-            <el-form-item>
-              <el-input v-model="filter.id" type="text" placeholder="id" style="width: 50px" />
-            </el-form-item>
-            <el-form-item>
-              <el-input
-                v-model="filter.title"
-                type="text"
-                placeholder="题目标题"
-                style="width: 150px"
-                @keyup.enter="getQuestion()"
-              />
-            </el-form-item>
-            <el-form-item>
-              <el-select
-                v-model="filter.difficulty"
-                placeholder="难度评级"
-                style="width: 120px"
-                @change="getQuestion()"
-              >
-                <el-option
-                  v-for="it in levels"
-                  :key="it.index"
-                  :label="it.label"
-                  :value="it.index"
-                />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-select
-                v-model="filter.tags"
-                multiple
-                filterable
-                clearable
-                placeholder="题目标签"
-                style="width: 350px"
-                @change="getQuestion()"
-              >
-                <el-option
-                  v-for="tag in tagList"
-                  :key="tag.name"
-                  :label="tag.name"
-                  :value="tag.name!"
-                >
-                  <el-tag type="info">
-                    <span class="tag-text">{{ tag.name }} </span>
-                  </el-tag>
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-          <el-button-group>
-            <el-button type="primary" @click="getQuestion()">筛选记录 </el-button>
-            <el-button type="success" @click="clear()">显示全部</el-button>
-          </el-button-group>
-        </div>
-        <el-table class="list" :data="problemList" style="width: 100%" v-loading="!finished">
-          <el-table-column fixed prop="id" label="id" width="100" />
-          <el-table-column prop="title" label="题目" width="200" />
-          <el-table-column prop="tagList" label="标签" width="250">
-            <template #default="scope">
-              <div v-for="(item, index) in scope.row.tagList" :key="index">
-                <el-tag type="success">{{ item }}</el-tag>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column prop="difficulty" label="难度" width="100">
-            <template #default="scope">
-              <div v-if="scope.row.difficulty === 0">
-                <el-tag type="success">简单</el-tag>
-              </div>
-              <div v-else-if="scope.row.difficulty === 1">
-                <el-tag type="warning">适中</el-tag>
-              </div>
-              <div v-else>
-                <el-tag type="danger">困难</el-tag>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column fixed="right" label="操作" min-width="20">
-            <template #default="scope">
-              <el-button type="primary" @click="gotoContentById(scope.row.id)"> 学习 </el-button>
-              <el-button type="primary" @click="gotoEditById(scope.row.id)"> 编辑 </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </el-card>
-    </div>
+      </TableHeader>
+
+      <Table
+        :loading="loading"
+        :data="data"
+        :columns="columns"
+        :pagination="pagination"
+        @pagination:size-change="handleSizeChange"
+        @pagination:current-change="handleCurrentChange"
+      >
+      </Table>
+    </ElCard>
   </div>
 </template>
 <script setup lang="ts">
-  import { onMounted, ref } from 'vue'
+  import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import { ProblemControllerService, type TagVO } from '@/openapi/web'
-  import { ElMessage } from 'element-plus'
+  import { ProblemControllerService, ProblemTitleVO, type TagVO } from '@/openapi/web'
+  import { ElMessage, ElMessageBox, ElTag } from 'element-plus'
+  import ProblemSearch from '@views/problem/problem-list/modules/problem-search.vue'
+  import { useTable } from '@/hooks/core/useTable'
+  import { fetchGetProblemTitleList } from '@/api/system-manage'
+  import ButtonTable from '@/components/forms/button-table/index.vue'
+  import { useUser } from '@/hooks/core/userUser'
+  import { DialogType } from '@/types'
+  import { AdminControllerService } from '@api/user'
+  import { loadingService } from '@utils/ui'
+  import { useI18n } from 'vue-i18n'
+
+  const { hasRole } = useUser()
+
+  const { t } = useI18n()
 
   const router = useRouter()
 
-  const current = ref(1)
-  const size = ref(10)
-  const total = ref(0)
-  const finished = ref(false)
+  const searchForm = ref({
+    id: undefined,
+    problemId: undefined,
+    title: undefined,
+    author: undefined,
+    source: undefined,
+    difficulty: undefined
+  })
+
+  const {
+    columns,
+    columnChecks,
+    data,
+    loading,
+    pagination,
+    getData,
+    searchParams,
+    resetSearchParams,
+    handleSizeChange,
+    handleCurrentChange,
+    refreshData
+  } = useTable({
+    // 核心配置
+    core: {
+      apiFn: fetchGetProblemTitleList,
+      apiParams: {
+        ...searchForm.value
+      },
+      columnsFactory: () => [
+        { prop: 'problemId', minWidth: 60, label: 'Id' },
+        {
+          prop: 'title',
+          label: '题目',
+          minWidth: 120
+        },
+        {
+          prop: 'source',
+          label: '来源',
+          minWidth: 120
+        },
+        {
+          prop: 'difficulty',
+          label: '难度',
+          sortable: true,
+          formatter: (row) => {
+            const statusConfig = getDifficultyConfig(row.difficulty!)
+            return h(ElTag, { type: statusConfig.type }, () => statusConfig.text)
+          }
+        },
+        {
+          prop: 'operation',
+          label: '操作',
+          width: 160,
+          fixed: 'right', // 固定列
+          formatter: (row) => {
+            const buttons = []
+
+            if (hasRole('root')) {
+              buttons.push(
+                h(ButtonTable, {
+                  type: 'edit',
+                  onClick: () => showEditDialog('edit', row)
+                })
+              )
+              buttons.push(
+                h(ButtonTable, {
+                  type: 'delete',
+                  onClick: () => deleteProblem(row)
+                })
+              )
+            }
+            buttons.push(
+              h(ButtonTable, {
+                type: 'view',
+                onClick: () => toDetail(row)
+              })
+            )
+            return h('div', buttons)
+          }
+        }
+      ]
+    }
+  })
+
+  const handleSearch = (params: Record<string, any>) => {
+    Object.assign(searchParams, params)
+    getData()
+  }
 
   const tagList = ref<TagVO[]>([])
 
-  const problemList = ref()
+  const DIFFICULTY_STATUS_CONFIG = {
+    '0': { type: 'success' as const, text: '简单' },
+    '1': { type: 'warning' as const, text: '中等' },
+    '2': { type: 'danger' as const, text: '困难' }
+  } as const
 
-  const columns = ref([
-    {
-      title: 'Id',
-      dataIndex: 'id'
-    },
-    {
-      title: '标题',
-      dataIndex: 'title',
-      slotName: 'title'
-    },
-    {
-      title: '标签',
-      dataIndex: 'tags',
-      slotName: 'tags'
-    },
-    {
-      title: '难度',
-      dataIndex: 'difficulty',
-      slotName: 'difficulty'
-    }
-  ])
+  const getDifficultyConfig = (status: number) => {
+    return (
+      DIFFICULTY_STATUS_CONFIG[status.toString() as keyof typeof DIFFICULTY_STATUS_CONFIG] || {
+        type: 'info' as const,
+        text: '未知'
+      }
+    )
+  }
 
-  const levels = ref([
-    {
-      index: 0,
-      label: '简单',
-      color: '#BFBFBF'
-    },
-    {
-      index: 1,
-      label: '适中',
-      color: '#FE4C61'
-    },
-    {
-      index: 2,
-      label: '困难',
-      color: '#FFC116'
-    }
-  ])
+  const showEditDialog = (type: DialogType, row?: ProblemTitleVO): void => {
+    // todo
+    ElMessage.success('待开发')
+  }
+
+  const deleteProblem = async (row: ProblemTitleVO) => {
+    // todo 删除Problem
+  }
+
+  /**
+   * 显示用户弹窗
+   */
+  const showDialog = (type: DialogType, row?: ProblemTitleVO): void => {
+    ElMessage.success('待开发')
+  }
 
   const getTagList = async () => {
     const res = await ProblemControllerService.getProblemTagList()
@@ -171,13 +175,8 @@
     }
   }
 
-  const gotoContentById = (id: string) => {
-    router.push({
-      path: '/common/problem/content',
-      query: {
-        id: id
-      }
-    })
+  const toDetail = (item: ProblemTitleVO) => {
+    router.push({ name: 'ProblemDetail', params: { id: item.id } })
   }
 
   const gotoEditById = (id: string) => {
@@ -189,51 +188,6 @@
       }
     })
   }
-
-  const filter = ref({
-    title: null,
-    difficulty: null,
-    tags: [],
-    id: null
-  })
-
-  const getQuestion = async () => {
-    finished.value = false
-    const res = await ProblemControllerService.searchProblemTitleTwo(
-      current.value,
-      size.value,
-      filter.value.id as any,
-      filter.value.tags as any,
-      filter.value.difficulty as any,
-      filter.value.title as any
-    )
-    if (res.code === 200) {
-      total.value = res.data?.total
-      problemList.value = res.data?.records
-      finished.value = true
-    } else {
-      ElMessage.error('获取题目列表失败' + res.message)
-    }
-  }
-
-  const handleCurrentChange = (val: number) => {
-    current.value = val
-    getQuestion()
-  }
-
-  // 显示全部
-  const clear = () => {
-    filter.value.difficulty = null
-    filter.value.title = null
-    filter.value.tags = []
-    filter.value.id = null
-    getQuestion()
-  }
-
-  onMounted(() => {
-    getQuestion()
-    getTagList()
-  })
 </script>
 <style scoped>
   h2 {

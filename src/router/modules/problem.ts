@@ -7,8 +7,7 @@ export const problemRoutes: AppRouteRecord = {
   component: '/index/index',
   meta: {
     title: 'menus.problem.title',
-    icon: 'ri:book-2-line',
-    roles: ['root']
+    icon: 'ri:book-2-line'
   },
   children: [
     {
@@ -16,6 +15,17 @@ export const problemRoutes: AppRouteRecord = {
       name: 'AllProblem',
       component: '/problem/problem-list',
       meta: { title: 'menus.problem.allProblem', icon: 'ri:book-3-line' }
+    },
+    {
+      path: 'problem/:id',
+      name: 'ProblemDetail',
+      component: '/problem/problem-detail',
+      meta: {
+        title: 'menus.problem.problemDetail',
+        isHide: true,
+        keepAlive: true,
+        activePath: '/problem/all'
+      }
     },
     {
       path: 'favor',

@@ -11,10 +11,16 @@
     "problem": {
       "title": "Problem",
       "allProblem": "AllProblem",
-      "favorProblem": "Favor Problem"
+      "favorProblem": "Favor Problem",
+      "problemDetail": "Problem Detail"
     },
     "admin": {
-      "title": "Admin"
+      "title": "Admin",
+      "activityManage": "Activity Manage",
+      "announcementManage": "Announcement Manage",
+      "courseManage": "Course Manage",
+      "problemManage": "Problem Manege",
+      "userManage": "User Manage"
     },
     "system": {
       "title": "System Settings",
@@ -64,10 +70,52 @@
       "setting": "Setting"
     }
   },
-  "common": {
+  "table": {
+    "form": {
+      "reset": "Reset",
+      "submit": "Submit"
+    },
+    "searchBar": {
+      "reset": "Reset",
+      "search": "Search",
+      "expand": "Expand",
+      "collapse": "Collapse",
+      "searchInputPlaceholder": "Please enter",
+      "searchSelectPlaceholder": "Please select"
+    },
+    "selection": "Select",
+    "sizeOptions": {
+      "small": "Compact",
+      "default": "Default",
+      "large": "Loose"
+    },
+    "column": {
+      "selection": "Select",
+      "expand": "Expand",
+      "index": "Index"
+    },
+    "zebra": "Zebra",
+    "border": "Border",
+    "headerBackground": "Header BG"
+  },
+  "message": {
     "tips": "Prompt",
+    "logOutTips": "Do you want to log out?",
+    "deleteUserTips": "Are you sure you want to log out of this user?",
     "cancel": "Cancel",
     "confirm": "Confirm",
-    "logOutTips": "Do you want to log out?"
+    "success": {
+      "add": "Add Success",
+      "delete": "Delete Success"
+    }
+  },
+  "views": {
+    "announcement": {
+      "rules": {
+        "title": "Please fill in the title",
+        "titleSize": "Please ensure the title length is between 2 and 255 characters"
+      },
+      "createTime": "Create Time:"
+    }
   }
 }

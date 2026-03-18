@@ -11,10 +11,16 @@
     "problem": {
       "title": "题库",
       "allProblem": "全部题库",
-      "favorProblem": "我的收藏"
+      "favorProblem": "我的收藏",
+      "problemDetail": "题目详情"
     },
     "admin": {
-      "title": "后台管理"
+      "title": "后台管理",
+      "activityManage": "活动管理",
+      "announcementManage": "公告管理",
+      "courseManage": "课程管理",
+      "problemManage": "题目管理",
+      "userManage": "用户管理"
     },
     "system": {
       "title": "系统设置",
@@ -64,10 +70,52 @@
       "setting": "基础设置"
     }
   },
-  "common": {
+  "table": {
+    "form": {
+      "reset": "重置",
+      "submit": "提交"
+    },
+    "searchBar": {
+      "reset": "重置",
+      "search": "查询",
+      "expand": "展开",
+      "collapse": "收起",
+      "searchInputPlaceholder": "请输入",
+      "searchSelectPlaceholder": "请选择"
+    },
+    "selection": "选择",
+    "sizeOptions": {
+      "small": "紧凑",
+      "default": "默认",
+      "large": "宽松"
+    },
+    "column": {
+      "selection": "勾选",
+      "expand": "展开",
+      "index": "序号"
+    },
+    "zebra": "斑马纹",
+    "border": "边框",
+    "headerBackground": "表头背景"
+  },
+  "message": {
     "tips": "提示",
     "cancel": "取消",
     "confirm": "确定",
-    "logOutTips": "您是否要退出登录?"
+    "logOutTips": "您是否要退出登录?",
+    "deleteUserTips": "确定删除该用户?",
+    "success": {
+      "add": "添加成功",
+      "delete": "删除成功"
+    }
+  },
+  "views": {
+    "announcement": {
+      "rules": {
+        "title": "请输入标题",
+        "titleSize": "标题长度需在2-255个字符之间"
+      },
+      "createTime": "发布于："
+    }
   }
 }

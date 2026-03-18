@@ -2,58 +2,41 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { BaseResponseListUserVO } from '../models/BaseResponseListUserVO';
-import type { BaseResponseUserVO } from '../models/BaseResponseUserVO';
+import type { BaseResponsePageUserAdminVO } from '../models/BaseResponsePageUserAdminVO';
 import type { BaseResponseVoid } from '../models/BaseResponseVoid';
+import type { UserSearchDTO } from '../models/UserSearchDTO';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class AdminControllerService {
     /**
-     * @param arg0
-     * @returns BaseResponseListUserVO OK
+     * @param requestBody
+     * @returns BaseResponsePageUserAdminVO OK
      * @throws ApiError
      */
-    public static searchUserByGender(
-        arg0: string,
-    ): CancelablePromise<BaseResponseListUserVO> {
+    public static getUserList(
+        requestBody: UserSearchDTO,
+    ): CancelablePromise<BaseResponsePageUserAdminVO> {
         return __request(OpenAPI, {
-            method: 'GET',
-            url: '/amdin/search-list-by-gender',
-            query: {
-                'arg0': arg0,
-            },
+            method: 'POST',
+            url: '/admin/user-list',
+            body: requestBody,
+            mediaType: 'application/json',
         });
     }
     /**
-     * @param arg0
-     * @returns BaseResponseUserVO OK
-     * @throws ApiError
-     */
-    public static searchUserById(
-        arg0: string,
-    ): CancelablePromise<BaseResponseUserVO> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/amdin/search-by-uuid',
-            query: {
-                'arg0': arg0,
-            },
-        });
-    }
-    /**
-     * @param arg0
+     * @param id
      * @returns BaseResponseVoid OK
      * @throws ApiError
      */
-    public static deleteUserByUuid(
-        arg0: string,
+    public static deleteUserByid(
+        id: string,
     ): CancelablePromise<BaseResponseVoid> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/amdin/delete-by-uuid',
+            url: '/admin/delete-by-uuid',
             query: {
-                'arg0': arg0,
+                'id': id,
             },
         });
     }

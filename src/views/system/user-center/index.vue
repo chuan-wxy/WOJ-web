@@ -4,18 +4,18 @@
     <div class="relative flex-b mt-2.5 max-md:block max-md:mt-1">
       <div class="w-112 mr-5 max-md:w-full max-md:mr-0">
         <div class="art-card-sm relative p-9 pb-6 overflow-hidden text-center">
-          <img class="absolute top-0 left-0 w-full h-50 object-cover" src="@imgs/user/bg.webp" />
+          <img class="absolute top-0 left-0 w-full h-50 object-cover" src="@imgs/user/bg.png" />
           <img
             class="relative z-10 w-20 h-20 mt-30 mx-auto object-cover border-2 border-white rounded-full"
-            src="@imgs/user/avatar.webp"
+            :src="userInfo.avatar"
           />
-          <h2 class="mt-5 text-xl font-normal">{{ userInfo.userName }}</h2>
+          <h2 class="mt-5 text-xl font-normal">{{ userInfo.name }}</h2>
           <p class="mt-5 text-sm">{{ userInfo.signature }}</p>
 
           <div class="w-75 mx-auto mt-7.5 text-left">
             <div class="mt-2.5">
               <SvgIcon icon="ri:mail-line" class="text-g-700" />
-              <span class="ml-2 text-sm">{{ userInfo.userAccount }}</span>
+              <span class="ml-2 text-sm">{{ userInfo.account }}</span>
             </div>
             <div class="mt-2.5">
               <SvgIcon icon="ri:user-3-line" class="text-g-700" />

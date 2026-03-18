@@ -4,7 +4,7 @@
 /* ==================== Light Mode Variables ==================== */
 :root {
   /* Base Colors */
-  --art-color: #ffffff;
+  --woj-color: #ffffff;
   --theme-color: var(--main-color);
 
   /* Theme Colors - OKLCH Format */
@@ -187,7 +187,6 @@
 
 /* ==================== Custom Component Classes ==================== */
 @layer components {
-  /* Art Card Header Component */
   .woj-card-header {
     @apply flex justify-between pr-6 pb-1;
 

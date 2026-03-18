@@ -2,23 +2,22 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Data } from './Data';
 export type UserVO = {
     id?: number;
-    userAccount?: string;
-    userName?: string;
+    account?: string;
+    name?: string;
     roles?: Array<string>;
-    userProfile?: string;
+    profile?: string;
     school?: string;
     course?: string;
     number?: string;
-    gender?: string;
+    gender?: number;
     github?: string;
     blog?: string;
     avatar?: string;
     signature?: string;
     titleName?: string;
     titleColor?: string;
-    createTime?: Data;
+    createTime?: string;
 };
 

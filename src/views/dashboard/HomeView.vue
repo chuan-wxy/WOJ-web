@@ -66,8 +66,7 @@
 
   const tableData = ref([] as AnnouncementTitleVO[])
   const loadData = async () => {
-    const res = await AnnouncementControllerService.getAnnouncementList()
-    console.log(res)
+    const res = await AnnouncementControllerService.getAnnouncementTitleList()
 
     if (res.code === 200) {
       tableData.value = res.data as AnnouncementTitleVO[]
