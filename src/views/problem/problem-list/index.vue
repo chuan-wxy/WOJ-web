@@ -6,7 +6,7 @@
       <TableHeader v-model:columns="columnChecks" :loading="loading" @refresh="refreshData">
         <template #left>
           <ElSpace wrap>
-            <ElButton @click="showDialog('add')" v-roles="['root']" v-ripple>新增题目</ElButton>
+            <ElButton @click="toAdd" v-roles="['root']" v-ripple>新增题目</ElButton>
           </ElSpace>
         </template>
       </TableHeader>
@@ -105,7 +105,7 @@
               buttons.push(
                 h(ButtonTable, {
                   type: 'edit',
-                  onClick: () => showEditDialog('edit', row)
+                  onClick: () => toEdit(row)
                 })
               )
               buttons.push(
@@ -133,8 +133,6 @@
     getData()
   }
 
-  const tagList = ref<TagVO[]>([])
-
   const DIFFICULTY_STATUS_CONFIG = {
     '0': { type: 'success' as const, text: '简单' },
     '1': { type: 'warning' as const, text: '中等' },
@@ -150,43 +148,30 @@
     )
   }
 
-  const showEditDialog = (type: DialogType, row?: ProblemTitleVO): void => {
-    // todo
-    ElMessage.success('待开发')
-  }
-
   const deleteProblem = async (row: ProblemTitleVO) => {
     // todo 删除Problem
-  }
-
-  /**
-   * 显示用户弹窗
-   */
-  const showDialog = (type: DialogType, row?: ProblemTitleVO): void => {
     ElMessage.success('待开发')
   }
 
-  const getTagList = async () => {
-    const res = await ProblemControllerService.getProblemTagList()
-    if (res.code === 200 && res.data != null) {
-      tagList.value = res.data
-    } else {
-      ElMessage.error('获取题目标签失败')
-    }
+  // todo 通过题目标签查找
+  // const getTagList = async () => {
+  //   const res = await ProblemControllerService.getProblemTagList()
+  //   if (res.code === 200 && res.data != null) {
+  //     tagList.value = res.data
+  //   } else {
+  //     ElMessage.error('获取题目标签失败')
+  //   }
+  // }
+  const toAdd = () => {
+    router.push({ name: 'ProblemManage', replace: true })
   }
 
   const toDetail = (item: ProblemTitleVO) => {
     router.push({ name: 'ProblemDetail', params: { id: item.id } })
   }
 
-  const gotoEditById = (id: string) => {
-    router.push({
-      path: '/admin/addproblem',
-      query: {
-        id: id,
-        update: 1
-      }
-    })
+  const toEdit = (item: ProblemTitleVO) => {
+    router.push({ name: 'ProblemManage', query: { id: item.id } })
   }
 </script>
 <style scoped>

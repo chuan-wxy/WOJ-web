@@ -1,79 +1,132 @@
 <template>
-  <div id="addQuestion">
-    <div class="panel-body" style="max-width: 600px">
-      <a-form-item field="difficulty" label="难度">
-        <a-select :style="{ width: '100px' }" placeholder="请选择" v-model="form.difficulty">
-          <a-option value="0">简单</a-option>
-          <a-option value="1">中等</a-option>
-          <a-option value="2">困难</a-option>
-        </a-select>
-      </a-form-item>
+  <div>
+    <div>
+      <div class="max-w-250 mx-auto my-5">
+        <ElRow :gutter="2">
+          <ElCol :span="9">
+            <ElInput
+              v-model.trim="form.title"
+              placeholder="请输入题目标题（最多255个字符）"
+              maxlength="255"
+            />
+          </ElCol>
+          <ElCol :span="6">
+            <ElInputTag v-model="form.tagList" placeholder="题目标签" />
+          </ElCol>
+          <ElCol :span="4">
+            <ElInput v-model="form.problemId" placeholder="自定义id" />
+          </ElCol>
+          <ElCol :span="5">
+            <ElSelect v-model="form.difficulty" placeholder="请选择题目难度">
+              <ElOption label="简单" :value="0" />
+              <ElOption label="中等" :value="1" />
+              <ElOption label="困难" :value="2" />
+            </ElSelect>
+          </ElCol>
+        </ElRow>
 
-      <a-form-item field="title" label="题目名称">
-        <a-input v-model="form.title" placeholder="请输入题目名称" />
-      </a-form-item>
+        <!-- 富文本编辑器 -->
+        <WangEditor class="mt-2.5" v-model="form.description" />
 
-      <a-form-item field="problemId" label="自定义ID">
-        <a-input v-model="form.problemId" placeholder="请输入自定义id" />
-      </a-form-item>
+        <div class="p-5 mt-5 woj-card-xs">
+          <h2 class="mb-5 text-xl font-medium">发布设置</h2>
+          <!-- 图片上传 -->
+          <ElRow>
+            <ElCol :span="12">
+              <ElForm>
+                <ElFormItem label="封面">
+                  <div class="mt-2.5">
+                    <!--                    <el-upload class="upload-demo" :data="fileData">-->
+                    <!--                      <i class="el-icon-upload"></i>-->
+                    <!--                      <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>-->
+                    <!--                    </el-upload>-->
+                    <ElUpload
+                      drag
+                      multiple
+                      accept=".txt"
+                      :action="uploadjudgeCaseUrl"
+                      :headers="uploadHeaders"
+                      :on-success="onSuccess"
+                      :on-error="onError"
+                      :before-upload="beforeUpload"
+                      class="judge-case-upload"
+                    >
+                      <ElIcon class="el-icon--upload"><UploadFilled /></ElIcon>
+                      <div class="el-upload__text">
+                        将测试用例 (.txt) 拖到此处，或 <em>点击上传</em>
+                      </div>
 
-      <a-form-item field="tags" label="标签">
-        <a-input-tag v-model="form.tagList" placeholder="请输入题目标签" />
-      </a-form-item>
+                      <template #tip>
+                        <div class="el-upload__tip text-g-700 mt-2">
+                          请上传 .txt 格式的输入/输出文件，支持批量拖拽
+                        </div>
+                      </template>
+                    </ElUpload>
+                  </div>
+                </ElFormItem>
+                <ElFormItem label="可见">
+                  <ElSwitch v-model="visible" />
+                </ElFormItem>
+              </ElForm>
+            </ElCol>
+            <ElCol :span="12">
+              <ElSpace direction="vertical" :size="31" fill class="w-full">
+                <ElInput v-model="form.timeLimit" placeholder="时间限制" />
+                <ElInput v-model="form.memoryLimit" placeholder="内存限制" />
+                <ElInput v-model="form.problemId" placeholder="自定义id" />
+              </ElSpace>
+            </ElCol>
+          </ElRow>
 
-      <a-form-item field="content" label="内容">
-        <MdEditor :value="form.description" :handle-change="onContentMdchange" />
-      </a-form-item>
-      <a-form-item label="配置" :content-flex="false" :merge-props="false">
-        <a-space direction="vertical" fill>
-          <a-form-item field="judgeConfig.timeLimit1" label="时间限制">
-            <a-input v-model="form.timeLimit" placeholder="时间限制" />
-          </a-form-item>
-          <a-form-item field="judgeConfig.memoryLimit" label="内存限制">
-            <a-input v-model="form.memoryLimit" placeholder="内存限制" />
-          </a-form-item>
-          <a-form-item field="judgeConfig.stackLimit" label="堆栈限制">
-            <a-input v-model="form.stackLimit" placeholder="堆栈限制" />
-          </a-form-item>
-        </a-space>
-      </a-form-item>
-      <el-upload
-        class="upload-demo"
-        drag
-        method="POST"
-        :headers="{ Authorization: jwt }"
-        :action="judgeCaseUploadPath"
-        multiple
-        :data="fileData"
-      >
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-      </el-upload>
-      <a-button v-if="isUpdate === false" status="success" @click="addQuestion()">提交 </a-button>
-      <a-button v-else status="success" @click="updateQuestion()">修改 </a-button>
+          <div class="flex justify-end">
+            <ElButton type="primary" @click="addQuestion" class="w-25">
+              {{ pageMode === PageModeEnum.Edit ? '保存' : '发布' }}
+            </ElButton>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { onBeforeMount, ref } from 'vue'
-  import MdEditor from '@/components/MdEditor.vue'
   import { useRoute } from 'vue-router'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { ProblemControllerService } from '@api/web'
   import { useUserStore } from '@/store/modules/user'
   import { ProblemVO } from '@api/web'
   import { ProblemAddDTO } from '@api/web'
+  import { PageModeEnum } from '@/enums/formEnum'
+  import EmojiText from '@utils/ui/emojo'
+  import { UploadFilled } from '@element-plus/icons-vue'
+  import { loadingService } from '@utils/ui'
+
+  interface UploadResponse {
+    data: {
+      url: string
+    }
+  }
+
+  const pageMode = ref<PageModeEnum>(PageModeEnum.Add)
+  const visible = ref(true)
+
+  const MAX_SIZE = 3 // MB
 
   const route = useRoute()
   const userStore = useUserStore()
+  const { accessToken } = userStore
+
+  const uploadjudgeCaseUrl = ref('')
+  const uploadHeaders = { Authorization: accessToken }
+
   const isUpdate = ref(false)
   const jwt = ref('')
   const fileData = ref({
     pid: 'deafualt'
   })
-  const judgeCaseUploadPath = ref()
-  const form = ref({
+
+  const form = ref<ProblemAddDTO>({
     problemId: '',
     title: '',
     author: '',
@@ -90,7 +143,7 @@
     judgeMode: 'default',
     spjCode: '',
     spjLanguage: ''
-  } as ProblemAddDTO)
+  })
 
   const loadJwt = () => {
     const tokenStr = localStorage.getItem('user')
@@ -106,23 +159,33 @@
 
   const loadData = async () => {
     const id = route.query.id
-    const update = route.query.update
-    if (update) {
-      isUpdate.value = true
-    }
-    if (!id) {
-      return
-    }
-    const res = await ProblemControllerService.getProblem(Number(id))
-    if (res.code === 200 && res.data !== undefined) {
-      form.value = res.data as ProblemVO
-    } else {
-      ElMessage.error('加载失败：' + res.message)
+    try {
+      loadingService.showLoading()
+      if (id) {
+        // 编辑
+        pageMode.value = PageModeEnum.Edit
+        ElMessage.success('编辑')
+        const res = await ProblemControllerService.getProblem(Number(id))
+        if (res.code === 200 && res.data !== undefined) {
+          form.value = res.data as ProblemVO
+        } else {
+          ElMessage.error('加载失败：' + res.message)
+        }
+      } else {
+        // 新增
+        ElMessage.success('新增')
+
+        return
+      }
+    } catch (error) {
+      console.error(error)
+    } finally {
+      loadingService.hideLoading()
     }
   }
 
   const addQuestion = async () => {
-    form.value.author = userStore.userInfo.userName
+    form.value.author = userStore.userInfo.name
     const result = await ProblemControllerService.addProblem(form.value)
     if (result.code === 200) {
       ElMessage.success('添加成功')
@@ -162,6 +225,40 @@
     }
   }
 
+  /**
+   * 上传成功回调
+   */
+  const onSuccess = (response: UploadResponse) => {
+    ElMessage.success(`上传成功 ${EmojiText[200]}`)
+  }
+
+  /**
+   * 上传失败回调
+   */
+  const onError = () => {
+    ElMessage.error(`上传失败 ${EmojiText[500]}`)
+  }
+
+  /**
+   * 上传前的文件校验
+   */
+  const beforeUpload = (file: File): boolean => {
+    const isTxt = file.type.startsWith('text/plain')
+    const isLt3M = file.size / 1024 / 1024 < MAX_SIZE
+
+    if (!isTxt) {
+      ElMessage.error('只能上传文本文件')
+      return false
+    }
+
+    if (!isLt3M) {
+      ElMessage.error(`文件大小不能超过 ${MAX_SIZE}MB`)
+      return false
+    }
+
+    return true
+  }
+
   const onContentMdchange = (v: string) => {
     form.value.description = v
   }
@@ -170,18 +267,11 @@
     loadData()
     loadJwt()
     fileData.value.pid = form.value.problemId as string
-    judgeCaseUploadPath.value = import.meta.env.VITE_APP_JUDGECASE_UPLOAD_PATH
-    console.log(judgeCaseUploadPath)
+    uploadjudgeCaseUrl.value = import.meta.env.VITE_APP_JUDGECASE_UPLOAD_PATH
   })
 </script>
 
 <style scoped>
-  #addQuestion {
-    background: white;
-    width: 100%;
-    margin: auto;
-  }
-
   .panel-body {
     padding: 15px;
   }

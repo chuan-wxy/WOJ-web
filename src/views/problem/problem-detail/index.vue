@@ -1,5 +1,5 @@
 <template>
-  <div id="problem-content">
+  <div class="page-content !mb-5">
     <el-row :gutter="10" style="margin: auto; max-width: 1500px; min-width: 600px">
       <el-col :span="24" :xs="24" :sm="24" :md="16">
         <el-card shadow="hover">
