@@ -133,6 +133,7 @@ export const useSettingStore = defineStore(
       getCustomRadius,
       setCustomRadius,
       refresh,
+      isDark,
       boxBorderMode,
       pageTransition,
       customRadius,

@@ -8,9 +8,6 @@ import '@styles/index.scss' // 样式
 import '@utils/sys/console.ts' // 控制台输出内容
 import { setupGlobDirectives } from '@/directives'
 
-// import '@arco-design/web-vue/dist/arco.css'
-// import 'bytemd/dist/index.css'
-
 const app = createApp(App)
 
 initPinia(app)

@@ -61,7 +61,7 @@
           >
             <ElRow>
               <ElFormItem :label="$t('system.label.userName')" prop="userName">
-                <ElInput v-model="userInfo.userName" :disabled="!isEdit" />
+                <ElInput v-model="userInfo.name" :disabled="!isEdit" />
               </ElFormItem>
               <ElFormItem :label="$t('system.label.gender')" prop="gender" class="ml-5">
                 <ElSelect v-model="userInfo.gender" placeholder="Select" :disabled="!isEdit">

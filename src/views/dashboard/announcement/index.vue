@@ -6,7 +6,7 @@
         <span>⌛{{ $t('views.announcement.createTime') }}{{ formTime }}</span>
       </template>
 
-      <WangEditor ref="fullEditorRef" v-model="announcementData.content!" read-only height="100%" />
+      <WangEditor v-model="announcementData.content!" read-only height="100%" />
     </ElCard>
   </div>
 </template>

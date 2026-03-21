@@ -52,11 +52,9 @@
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
   import { Question, QuestionControllerService, QuestionQueryRequest } from '../../../generated'
-
-  import { useRoute, useRouter } from 'vue-router'
+  import { useRouter } from 'vue-router'
   import { ElMessage } from 'element-plus'
 
-  const route = useRoute()
   const total = ref(0)
   const searchValue = ref('')
   const router = useRouter()

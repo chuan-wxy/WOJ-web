@@ -12,11 +12,6 @@
   },
   "dependencies": {
     "@arco-design/web-vue": "^2.57.0",
-    "@bytemd/plugin-gemoji": "^1.21.0",
-    "@bytemd/plugin-gfm": "^1.21.0",
-    "@bytemd/plugin-highlight-ssr": "^1.21.0",
-    "@bytemd/plugin-math-ssr": "^1.21.0",
-    "@bytemd/vue-next": "^1.21.0",
     "@element-plus/icons-vue": "^2.3.2",
     "@iconify/vue": "^4.1.1",
     "@tailwindcss/vite": "^4.1.14",

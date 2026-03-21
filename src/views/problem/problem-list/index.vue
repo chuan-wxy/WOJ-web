@@ -26,21 +26,15 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useRouter } from 'vue-router'
-  import { ProblemControllerService, ProblemTitleVO, type TagVO } from '@/openapi/web'
-  import { ElMessage, ElMessageBox, ElTag } from 'element-plus'
+  import { ProblemTitleVO } from '@/openapi/web'
+  import { ElMessage, ElTag } from 'element-plus'
   import ProblemSearch from '@views/problem/problem-list/modules/problem-search.vue'
   import { useTable } from '@/hooks/core/useTable'
   import { fetchGetProblemTitleList } from '@/api/system-manage'
   import ButtonTable from '@/components/forms/button-table/index.vue'
   import { useUser } from '@/hooks/core/userUser'
-  import { DialogType } from '@/types'
-  import { AdminControllerService } from '@api/user'
-  import { loadingService } from '@utils/ui'
-  import { useI18n } from 'vue-i18n'
 
   const { hasRole } = useUser()
-
-  const { t } = useI18n()
 
   const router = useRouter()
 
@@ -77,6 +71,11 @@
         {
           prop: 'title',
           label: '题目',
+          minWidth: 120
+        },
+        {
+          prop: 'author',
+          label: '作者',
           minWidth: 120
         },
         {
@@ -167,7 +166,7 @@
   }
 
   const toDetail = (item: ProblemTitleVO) => {
-    router.push({ name: 'ProblemDetail', params: { id: item.id } })
+    router.push({ name: 'ProblemDetail', params: { id: String(item.id) } })
   }
 
   const toEdit = (item: ProblemTitleVO) => {

@@ -20,6 +20,7 @@ export const problemRoutes: AppRouteRecord = {
       path: 'problem/:id',
       name: 'ProblemDetail',
       component: '/problem/problem-detail',
+      props: true,
       meta: {
         title: 'menus.problem.problemDetail',
         isHide: true,

@@ -151,7 +151,7 @@
   // 顶部栏功能配置
   const { fastEnterMinWidth: headerBarFastEnterMinWidth } = useHeaderBar()
 
-  const { systemThemeColor } = storeToRefs(settingStore)
+  const { systemThemeColor, isDark } = storeToRefs(settingStore)
 
   const { language } = storeToRefs(userStore)
   const { menuList } = storeToRefs(menuStore)
