@@ -206,6 +206,25 @@
     focus: () => editorRef.value?.focus()
   })
 
+  watch(
+    () => modelValue.value,
+    () => {
+      nextTick(() => {
+        // 这里的 window.MathJax 已经通过上面的声明变得“合法”了
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          // 找到编辑器外层容器进行局部渲染
+          const el = document.querySelector('.editor-wrapper') as HTMLElement
+          if (el) {
+            window.MathJax.typesetPromise([el]).catch((err) => {
+              console.error('MathJax 渲染失败:', err)
+            })
+          }
+        }
+      })
+    },
+    { immediate: true }
+  )
+
   // 生命周期
   onMounted(() => {
     // 图标替换已在 onCreateEditor 中处理

@@ -4,30 +4,12 @@ import { defineAsyncComponent } from 'vue'
  * 全局组件配置列表
  */
 export const globalComponentsConfig: GlobalComponentConfig[] = [
-  // {
-  //   name: '设置面板',
-  //   key: 'settings-panel',
-  //   component: defineAsyncComponent(
-  //     () => import('@/components/core/layouts/art-settings-panel/index.vue')
-  //   ),
-  //   enabled: true
-  // },
-  // {
-  //   name: '全局搜索',
-  //   key: 'global-search',
-  //   component: defineAsyncComponent(
-  //     () => import('@/components/core/layouts/art-global-search/index.vue')
-  //   ),
-  //   enabled: true
-  // },
-  // {
-  //   name: '聊天窗口',
-  //   key: 'chat-window',
-  //   component: defineAsyncComponent(
-  //     () => import('@/components/core/layouts/art-chat-window/index.vue')
-  //   ),
-  //   enabled: true
-  // },
+  {
+    name: '聊天窗口',
+    key: 'chat-window',
+    component: defineAsyncComponent(() => import('@/components/layouts/ai-chat-window/index.vue')),
+    enabled: true
+  }
 ]
 
 /**

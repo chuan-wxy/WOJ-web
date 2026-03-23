@@ -30,5 +30,14 @@ declare module 'qrcode.vue' {
   export default QrcodeVue
 }
 
+// 增加 MathJax 的全局类型声明
+interface Window {
+  MathJax: {
+    typesetPromise: (elements?: HTMLElement[]) => Promise<void>
+    typeset: (elements?: HTMLElement[]) => void
+    [key: string]: any // 允许其他扩展属性
+  }
+}
+
 // 全局变量声明
 declare const __APP_VERSION__: string // 版本号

@@ -15,9 +15,7 @@
 
         <!-- 渲染展开行 -->
         <ElTableColumn v-else-if="col.type === 'expand'" v-bind="cleanColumnProps(col)">
-          <template #default="{ row }">
-            <component :is="col.formatter ? col.formatter(row) : null" />
-          </template>
+          <template #default="{ row }"> </template>
         </ElTableColumn>
 
         <!-- 渲染普通列 -->

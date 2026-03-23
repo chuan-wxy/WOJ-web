@@ -13,6 +13,10 @@
         <PageContent />
       </div>
     </main>
+
+    <div id="app-global">
+      <GlobalComponent />
+    </div>
   </div>
 </template>
 

@@ -67,26 +67,39 @@
         ...searchForm.value
       },
       columnsFactory: () => [
-        { prop: 'problemId', minWidth: 60, label: 'Id' },
+        { prop: 'problemId', width: 90, label: 'Id' },
         {
           prop: 'title',
           label: '题目',
-          minWidth: 120
+          width: 90
         },
         {
           prop: 'author',
           label: '作者',
-          minWidth: 120
+          width: 100
         },
         {
           prop: 'source',
           label: '来源',
-          minWidth: 120
+          width: 110
+        },
+        {
+          prop: 'tagList',
+          label: '标签',
+          minWidth: 120,
+          formatter: (row) => {
+            const list = row.tagList
+            if (!list) return
+            return h('div', { style: 'display: flex; gap: 8px;' }, [
+              ...list.map((item: string) => h(ElTag, { type: 'success', key: item }, () => item))
+            ])
+          }
         },
         {
           prop: 'difficulty',
           label: '难度',
           sortable: true,
+          width: 85,
           formatter: (row) => {
             const statusConfig = getDifficultyConfig(row.difficulty!)
             return h(ElTag, { type: statusConfig.type }, () => statusConfig.text)

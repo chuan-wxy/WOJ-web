@@ -82,7 +82,7 @@
         </IconButton>
 
         <!-- 聊天按钮 -->
-        <IconButton icon="ri:message-3-line" class="chat-button relative" @click="openChat">
+        <IconButton icon="ri:message-3-line" class="chat-button relative" @click="openAIChat">
           <div class="breathing-dot absolute top-2 right-2 size-1.5 !bg-success rounded-full"></div>
         </IconButton>
 
@@ -263,7 +263,7 @@
   /**
    * 打开聊天窗口
    */
-  const openChat = (): void => {
+  const openAIChat = (): void => {
     mittBus.emit('openChat')
   }
 </script>
