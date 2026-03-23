@@ -325,8 +325,6 @@ function useTableImpl<TApiFn extends (params: any) => Promise<any>>(
       }
 
       const response = await apiFn(requestParams)
-      console.log(response)
-
       // 检查请求是否被取消
       if (currentController.signal.aborted) {
         throw new Error('请求已取消')

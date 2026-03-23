@@ -27,8 +27,18 @@ function extractRecords<T>(obj: Record<string, unknown>, fields: string[]): T[] 
 // 辅助函数：从对象中提取总数
 function extractTotal(obj: Record<string, unknown>, records: unknown[], fields: string[]): number {
   for (const field of fields) {
-    if (field in obj && typeof obj[field] === 'number') {
-      return obj[field] as number
+    const value = obj[field]
+
+    if (typeof value === 'number') {
+      return value
+    }
+
+    if (typeof value === 'string') {
+      const parsed = parseFloat(value)
+      // 确保转换后是有效数字且不是 NaN
+      if (!isNaN(parsed)) {
+        return parsed
+      }
     }
   }
   return records.length
