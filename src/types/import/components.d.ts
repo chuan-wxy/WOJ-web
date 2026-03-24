@@ -12,7 +12,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AiChatWindow: typeof import('./../../components/layouts/ai-chat-window/index.vue')['default']
-    ArtGlobalComponent: typeof import('./../../components/layouts/art-global-component/index.vue')['default']
     ButtonTable: typeof import('./../../components/forms/button-table/index.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -21,6 +20,7 @@ declare module 'vue' {
     ElCheckbox: typeof import('element-plus/es')['ElCheckbox']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
@@ -44,11 +44,8 @@ declare module 'vue' {
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
-    ElUpload: typeof import('element-plus/es')['ElUpload']
     GlobalComponent: typeof import('./../../components/layouts/global-component/index.vue')['default']
     HeaderBar: typeof import('./../../components/layouts/header-bar/index.vue')['default']
-    HeaderMenu: typeof import('./../../components/HeaderMenu.vue')['default']
-    HelloWorld: typeof import('./../../components/HelloWorld.vue')['default']
     IconButton: typeof import('./../../components/widget/icon-button/index.vue')['default']
     Logo: typeof import('./../../components/base/logo/index.vue')['default']
     MdEditor: typeof import('./../../components/MdEditor.vue')['default']
@@ -58,7 +55,6 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchBar: typeof import('./../../components/forms/search-bar/index.vue')['default']
-    SideBar: typeof import('./../../components/SideBar.vue')['default']
     SidebarMenu: typeof import('./../../components/layouts/menus/sidebar-menu/index.vue')['default']
     SidebarSubmenu: typeof import('./../../components/layouts/menus/sidebar-menu/widget/SidebarSubmenu.vue')['default']
     SvgIcon: typeof import('./../../components/base/svg-icon/index.vue')['default']
@@ -67,7 +63,6 @@ declare module 'vue' {
     UserMenu: typeof import('./../../components/layouts/header-bar/widget/UserMenu.vue')['default']
     WangEditor: typeof import('./../../components/forms/wang-editor/index.vue')['default']
     WojCodeEditor: typeof import('./../../components/WojCodeEditor.vue')['default']
-    WojFooter: typeof import('./../../components/WojFooter.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
