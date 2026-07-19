@@ -1,6 +1,6 @@
 <template>
   <el-menu default-active="2" class="el-menu-vertical-demo">
-    <el-sub-menu v-for="(item, index) in data" :key="index" :index="index">
+    <el-sub-menu v-for="(item, index) in data" :key="index" :index="String(index)">
       <template #title>
         <el-icon>
           <location />
@@ -9,7 +9,7 @@
       </template>
       <el-menu-item
         v-for="(item1, index1) in item.children"
-        :index="index1"
+        :index="String(index1)"
         :key="index1"
         @click="handClick(item1.id)"
         >WOJ.{{ item1.name }}
@@ -20,7 +20,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
-import { CourseControllerService } from "../../../generated";
+import { CourseControllerService } from "@api/web";
 import { useRoute } from "vue-router";
 import { Location } from "@element-plus/icons-vue";
 import router from "@/router";

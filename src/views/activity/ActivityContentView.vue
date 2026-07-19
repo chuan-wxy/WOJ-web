@@ -3,9 +3,7 @@
     <div class="panel-body">
       <h1 style="text-align: center">{{ activityData.title }}</h1>
       <div class="footer">发布于： {{ activityData.createTime }}</div>
-      <div class="content">
-        <Viewer :value="activityData.description" />
-      </div>
+      <div class="content" v-html="activityData.description"></div>
     </div>
   </div>
 </template>
@@ -16,7 +14,6 @@
   import { ElMessage } from 'element-plus'
   import { ActivityControllerService } from '@api/web/services/ActivityControllerService'
   import { ActivityContentVO } from '@api/web/models/ActivityContentVO'
-  import { Viewer } from '@bytemd/vue-next'
 
   const route = useRoute()
   const activityData = ref({
@@ -58,5 +55,14 @@
 
   .footer {
     text-align: right;
+  }
+
+  .content {
+    margin-top: 24px;
+    line-height: 1.8;
+  }
+
+  .content :deep(img) {
+    max-width: 100%;
   }
 </style>

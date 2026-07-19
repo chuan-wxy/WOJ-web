@@ -4,6 +4,9 @@
       <el-form-item label="标题">
         <el-input v-model="form.title" />
       </el-form-item>
+      <el-form-item label="内容">
+        <WangEditor v-model="form.description" height="360px" />
+      </el-form-item>
       <el-upload
         class="upload-demo"
         drag
@@ -25,7 +28,6 @@
   import { onMounted, ref, watch } from 'vue'
   import { ElMessage } from 'element-plus'
   import { ActivityControllerService } from '@api/web'
-  import MdEditor from '@/components/MdEditor.vue'
   import WangEditor from '@/components/forms/wang-editor/index.vue'
 
   const avatarData = ref({

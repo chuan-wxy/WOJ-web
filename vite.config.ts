@@ -81,7 +81,7 @@ export default ({ mode }: { mode: string }) => {
       target: 'es2015',
       outDir: 'dist',
       chunkSizeWarningLimit: 2000,
-      minify: 'terser',
+      minify: 'esbuild',
       terserOptions: {
         compress: {
           // 生产环境去除 console

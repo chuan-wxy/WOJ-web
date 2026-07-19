@@ -1,188 +1,135 @@
 <template>
-  <div id="manage">
-    <div class="panel-body">
-      <div class="problemName">{{}}</div>
-      <div id="searchBox">
-        <a-space direction="vertical" size="large">
-          <a-input-search
-            :style="{ width: '320px' }"
-            placeholder="搜索题目"
-            v-model="searchValue"
-          />
-        </a-space>
+  <div class="page-content mb-5">
+    <ElCard shadow="never">
+      <div class="question-toolbar">
+        <ElInput
+          v-model="searchValue"
+          clearable
+          placeholder="搜索题目"
+          class="question-search"
+          @keyup.enter="listPage"
+          @clear="listPage"
+        />
+        <ElButton type="primary" @click="listPage">搜索</ElButton>
       </div>
-      <hr />
-      <a-table
-        :columns="columns"
-        :data="data"
-        :pagination="{
-          pageSize: questionQueryData.pageSize,
-          current: questionQueryData.current,
-          total: total
-        }"
-      >
-        <template #title="{ record }">
-          <a-button onclick="window.location.href = 'www.baidu.com'">{{ record.title }} </a-button>
-        </template>
-        <template #tags="{ record }">
-          <a-button
-            v-for="item in record.tags"
-            :key="item.id"
-            class="tagsButton"
-            onclick="window.location.href = 'www.baidu.com'"
-            >{{ item }}
-          </a-button>
-        </template>
-        <template #difficulty="{ record }">
-          <a-button onclick="window.location.href = 'www.baidu.com'"
-            >{{ record.difficulty }}
-          </a-button>
-        </template>
-        <template #caozuo="{ record }">
-          <a-space>
-            <a-button type="primary" @click="doUpdate(record)"> 修改</a-button>
-            <a-button status="danger" @click="doDelete(record)"> 删除</a-button>
-          </a-space>
-        </template>
-      </a-table>
-      {{ searchValue }}
-    </div>
+
+      <ElTable v-loading="loading" :data="data" border>
+        <ElTableColumn prop="id" label="ID" width="80" />
+        <ElTableColumn prop="problemId" label="题号" width="100" />
+        <ElTableColumn prop="title" label="题目" min-width="180" />
+        <ElTableColumn prop="author" label="作者" width="120" />
+        <ElTableColumn prop="difficulty" label="难度" width="100">
+          <template #default="{ row }">
+            <ElTag :type="getDifficultyType(row.difficulty)">
+              {{ getDifficultyText(row.difficulty) }}
+            </ElTag>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn prop="tagList" label="标签" min-width="180">
+          <template #default="{ row }">
+            <ElSpace wrap>
+              <ElTag v-for="tag in row.tagList || []" :key="tag" type="success">
+                {{ tag }}
+              </ElTag>
+            </ElSpace>
+          </template>
+        </ElTableColumn>
+        <ElTableColumn label="操作" width="150" fixed="right">
+          <template #default="{ row }">
+            <ElButton link type="primary" @click="toDetail(row)">查看</ElButton>
+            <ElButton link type="warning" @click="toUpdate(row)">编辑</ElButton>
+          </template>
+        </ElTableColumn>
+      </ElTable>
+
+      <div class="question-pagination">
+        <ElPagination
+          v-model:current-page="query.current"
+          v-model:page-size="query.pageSize"
+          background
+          layout="total, sizes, prev, pager, next"
+          :total="total"
+          @size-change="listPage"
+          @current-change="listPage"
+        />
+      </div>
+    </ElCard>
   </div>
 </template>
+
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
-  import { Question, QuestionControllerService, QuestionQueryRequest } from '../../../generated'
   import { useRouter } from 'vue-router'
-  import { ElMessage } from 'element-plus'
+  import { ProblemControllerService, ProblemSearchDTO, ProblemTitleVO } from '@api/web'
 
+  const router = useRouter()
+  const loading = ref(false)
   const total = ref(0)
   const searchValue = ref('')
-  const router = useRouter()
-  const doUpdate = async (question: Question) => {
-    router.push({
-      path: '/updatequestion',
-      query: {
-        id: question.id
-      }
-    })
-  }
-  const doDelete = async (question: Question) => {
-    const result = await QuestionControllerService.deleteQuestionUsingPost({
-      id: question.id
-    })
-    if (result.code === 200) {
-      ElMessage.success('删除成功')
-      listPage()
-    }
-  }
-
-  const columns = ref([
-    {
-      title: 'Id',
-      dataIndex: 'id'
-    },
-    {
-      title: '标题',
-      dataIndex: 'title',
-      slotName: 'title'
-    },
-    {
-      title: '标签',
-      dataIndex: 'tags',
-      slotName: 'tags'
-    },
-    {
-      title: '难度',
-      dataIndex: 'difficulty',
-      slotName: 'difficulty'
-    },
-    {
-      title: '创建人id',
-      dataIndex: 'userId',
-      slotName: 'userId'
-    },
-    {
-      title: '创建时间',
-      dataIndex: 'createTime',
-      slotName: 'createTime'
-    },
-    {
-      title: '更新时间',
-      dataIndex: 'updateTime',
-      slotName: 'updateTime'
-    },
-    {
-      title: '提交数',
-      dataIndex: 'submitNum',
-      slotName: 'submitNum'
-    },
-    {
-      title: '通过数',
-      dataIndex: 'accepteNum',
-      slotName: 'accepteNum'
-    },
-    {
-      title: '内容',
-      dataIndex: 'content',
-      slotName: 'content'
-    },
-    {
-      title: '判题规则',
-      dataIndex: 'judgeConfig',
-      slotName: 'judgeConfig'
-    },
-    {
-      title: '操作',
-      dataIndex: 'caozuo',
-      slotName: 'caozuo'
-    }
-  ])
-
-  const data = ref([])
-
-  const questionQueryData = ref({
+  const data = ref<ProblemTitleVO[]>([])
+  const query = ref({
     current: 1,
     pageSize: 10
-  } as QuestionQueryRequest)
+  })
+
+  const getDifficultyType = (difficulty?: number) => {
+    if (difficulty === 0) return 'success'
+    if (difficulty === 1) return 'warning'
+    if (difficulty === 2) return 'danger'
+    return 'info'
+  }
+
+  const getDifficultyText = (difficulty?: number) => {
+    if (difficulty === 0) return '简单'
+    if (difficulty === 1) return '中等'
+    if (difficulty === 2) return '困难'
+    return '未知'
+  }
+
+  const toDetail = (problem: ProblemTitleVO) => {
+    router.push({ name: 'ProblemDetail', params: { id: String(problem.id) } })
+  }
+
+  const toUpdate = (problem: ProblemTitleVO) => {
+    router.push({ name: 'ProblemManage', query: { id: problem.id } })
+  }
 
   const listPage = async () => {
-    const result = await QuestionControllerService.listQuestionByPageUsingPost(
-      questionQueryData.value
-    )
-    total.value = result.data.total
-    data.value = result.data.records
+    loading.value = true
+
+    try {
+      const res = await ProblemControllerService.getProblemTitleList(
+        query.value.current,
+        query.value.pageSize,
+        { title: searchValue.value || undefined } as ProblemSearchDTO
+      )
+
+      data.value = res.data?.records || []
+      total.value = res.data?.total || 0
+    } finally {
+      loading.value = false
+    }
   }
+
   onMounted(() => {
     listPage()
   })
 </script>
+
 <style scoped>
-  #problem {
-    background: #fffffe;
-    height: 1000px;
-    width: 75%;
-    margin: auto auto;
-    justify-content: center;
+  .question-toolbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
   }
 
-  h2 {
-    text-align: center;
+  .question-search {
+    max-width: 320px;
   }
 
-  hr {
-    color: #aaaaaa;
-    margin-top: 32px;
-  }
-
-  .panel-body {
-    padding: 15px;
-  }
-
-  #searchBox {
-    margin-left: 29%;
-  }
-
-  .tagsButton {
-    margin-left: 8px;
+  .question-pagination {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
   }
 </style>
